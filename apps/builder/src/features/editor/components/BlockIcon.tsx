@@ -74,6 +74,8 @@ export const BlockIcon = ({ type, mt }: BlockIconProps): JSX.Element => {
       return <PhoneInputIcon color={orange} mt={mt} />
     case InputBlockType.CHOICE:
       return <ButtonsInputIcon color={orange} mt={mt} />
+    case InputBlockType.CHOICE_UNCLICKABLE:
+      return <ButtonsInputIcon color={orange} mt={mt} />
     case InputBlockType.PICTURE_CHOICE:
       return <PictureChoiceIcon color={orange} mt={mt} />
     case InputBlockType.PAYMENT:

@@ -160,6 +160,7 @@
   "editor.sidebarBlock.analytics.label": "Analytics",
   "editor.sidebarBlock.audio.label": "Audio",
   "editor.sidebarBlock.button.label": "Buttons",
+  "editor.sidebarBlock.buttonUnclickable.label": "Schaltflächen (nicht anklickbar)",
   "editor.sidebarBlock.chatwoot.label": "Chatwoot",
   "editor.sidebarBlock.condition.label": "Bedingung",
   "editor.sidebarBlock.date.label": "Datum",

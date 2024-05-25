@@ -1,4 +1,4 @@
-import { ButtonItem, ContinueChatResponse } from '@typebot.io/schemas'
+import { ButtonItem, ButtonUnclickableItem, ContinueChatResponse } from '@typebot.io/schemas'
 import { WhatsAppSendingMessage } from '@typebot.io/schemas/features/whatsapp'
 import { isDefined, isEmpty } from '@typebot.io/lib/utils'
 import { BubbleBlockType } from '@typebot.io/schemas/features/blocks/bubbles/constants'
@@ -15,8 +15,8 @@ export const convertInputToWhatsAppMessages = (
   const lastMessageText =
     lastMessage?.type === BubbleBlockType.TEXT
       ? convertRichTextToMarkdown(lastMessage.content.richText ?? [], {
-          flavour: 'whatsapp',
-        })
+        flavour: 'whatsapp',
+      })
       : undefined
   switch (input.type) {
     case InputBlockType.DATE:
@@ -43,11 +43,11 @@ export const convertInputToWhatsAppMessages = (
           }
           const imageMessage = item.pictureSrc
             ? ({
-                type: 'image',
-                image: {
-                  link: item.pictureSrc ?? '',
-                },
-              } as const)
+              type: 'image',
+              image: {
+                link: item.pictureSrc ?? '',
+              },
+            } as const)
             : undefined
           const textMessage = {
             type: 'text',
@@ -70,11 +70,11 @@ export const convertInputToWhatsAppMessages = (
             type: 'button',
             header: item.pictureSrc
               ? {
-                  type: 'image',
-                  image: {
-                    link: item.pictureSrc,
-                  },
-                }
+                type: 'image',
+                image: {
+                  link: item.pictureSrc,
+                },
+              }
               : undefined,
             body: isEmpty(bodyText) ? undefined : { text: bodyText },
             action: {
@@ -113,6 +113,46 @@ export const convertInputToWhatsAppMessages = (
         input.items.filter((item) => isDefined(item.content)),
         env.WHATSAPP_INTERACTIVE_GROUP_SIZE
       ) as ButtonItem[][]
+      return items.map((items, idx) => ({
+        type: 'interactive',
+        interactive: {
+          type: 'button',
+          body: {
+            text: idx === 0 ? lastMessageText ?? '...' : '...',
+          },
+          action: {
+            buttons: items.map((item) => ({
+              type: 'reply',
+              reply: {
+                id: item.id,
+                title: trimTextTo20Chars(item.content as string),
+              },
+            })),
+          },
+        },
+      }))
+    }
+    case InputBlockType.CHOICE_UNCLICKABLE: {
+      if (
+        input.options?.isMultipleChoice ??
+        defaultChoiceInputOptions.isMultipleChoice
+      )
+        return [
+          {
+            type: 'text',
+            text: {
+              body:
+                `${lastMessageText}\n\n` +
+                input.items
+                  .map((item, idx) => `${idx + 1}. ${item.content}`)
+                  .join('\n'),
+            },
+          },
+        ]
+      const items = groupArrayByArraySize(
+        input.items.filter((item) => isDefined(item.content)),
+        env.WHATSAPP_INTERACTIVE_GROUP_SIZE
+      ) as ButtonUnclickableItem[][]
       return items.map((items, idx) => ({
         type: 'interactive',
         interactive: {

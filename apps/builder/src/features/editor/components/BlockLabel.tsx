@@ -39,6 +39,8 @@ export const BlockLabel = ({ type }: Props): JSX.Element => {
       return <Text fontSize="sm">{t('editor.sidebarBlock.phone.label')}</Text>
     case InputBlockType.CHOICE:
       return <Text fontSize="sm">{t('editor.sidebarBlock.button.label')}</Text>
+    case InputBlockType.CHOICE_UNCLICKABLE:
+      return <Text fontSize="sm">{t('editor.sidebarBlock.buttonUnclickable.label')}</Text>
     case InputBlockType.PICTURE_CHOICE:
       return (
         <Text fontSize="sm">{t('editor.sidebarBlock.picChoice.label')}</Text>

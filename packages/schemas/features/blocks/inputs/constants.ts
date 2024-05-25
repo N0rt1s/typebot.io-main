@@ -8,6 +8,7 @@ export enum InputBlockType {
   DATE = 'date input',
   PHONE = 'phone number input',
   CHOICE = 'choice input',
+  CHOICE_UNCLICKABLE = 'choice input (Unclickable)',
   PICTURE_CHOICE = 'picture choice input',
   PAYMENT = 'payment input',
   RATING = 'rating input',

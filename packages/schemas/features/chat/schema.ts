@@ -1,6 +1,7 @@
 import { z } from '../../zod'
 import {
   buttonsInputSchemas,
+  buttonsUnclickableInputSchemas,
   dateInputSchema,
   emailInputSchema,
   fileInputBlockSchemas,
@@ -302,6 +303,7 @@ const chatResponseBaseSchema = z.object({
       z.discriminatedUnion('type', [
         textInputSchema,
         buttonsInputSchemas.v6,
+        buttonsUnclickableInputSchemas.v6,
         emailInputSchema,
         numberInputSchema,
         urlInputSchema,

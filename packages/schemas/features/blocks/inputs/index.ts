@@ -1,4 +1,5 @@
 export * from './choice'
+export * from './choiceUnclickable'
 export * from './date'
 export * from './email'
 export * from './file'

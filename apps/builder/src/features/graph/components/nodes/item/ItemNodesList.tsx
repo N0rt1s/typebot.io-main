@@ -48,7 +48,8 @@ export const ItemNodesList = ({
 
   const someChoiceItemsAreNotConnected =
     block.type === InputBlockType.CHOICE ||
-    block.type === InputBlockType.PICTURE_CHOICE
+      block.type === InputBlockType.CHOICE_UNCLICKABLE ||
+      block.type === InputBlockType.PICTURE_CHOICE
       ? block.items.some((item) => item.outgoingEdgeId === undefined)
       : true
 
@@ -110,19 +111,19 @@ export const ItemNodesList = ({
 
   const handleBlockMouseDown =
     (itemIndex: number) =>
-    (
-      { absolute, relative }: { absolute: Coordinates; relative: Coordinates },
-      item: DraggableItem
-    ) => {
-      if (!typebot || block.items.length <= 1) return
-      placeholderRefs.current.splice(itemIndex + 1, 1)
-      detachItemFromBlock({ groupIndex, blockIndex, itemIndex })
-      setPosition(absolute)
-      setRelativeCoordinates(relative)
-      setDraggedItem({
-        ...item,
-      })
-    }
+      (
+        { absolute, relative }: { absolute: Coordinates; relative: Coordinates },
+        item: DraggableItem
+      ) => {
+        if (!typebot || block.items.length <= 1) return
+        placeholderRefs.current.splice(itemIndex + 1, 1)
+        detachItemFromBlock({ groupIndex, blockIndex, itemIndex })
+        setPosition(absolute)
+        setRelativeCoordinates(relative)
+        setDraggedItem({
+          ...item,
+        })
+      }
 
   const stopPropagating = (e: React.MouseEvent) => e.stopPropagation()
 

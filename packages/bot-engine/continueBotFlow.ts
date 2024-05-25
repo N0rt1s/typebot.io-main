@@ -45,6 +45,7 @@ import { downloadMedia } from './whatsapp/downloadMedia'
 import { uploadFileToBucket } from '@typebot.io/lib/s3/uploadFileToBucket'
 import { isURL } from '@typebot.io/lib/validators/isURL'
 import { isForgedBlockType } from '@typebot.io/schemas/features/blocks/forged/helpers'
+import { parseButtonsUnclickableReply } from './blocks/inputs/buttonsUnclickable/parseButtonsUnclickableReply'
 
 type Params = {
   version: 1 | 2
@@ -253,63 +254,63 @@ export const continueBotFlow = async (
 
 const processAndSaveAnswer =
   (state: SessionState, block: InputBlock) =>
-  async (reply: string | undefined): Promise<SessionState> => {
-    if (!reply) return state
-    let newState = await saveAnswerInDb(state, block)(reply)
-    return newState
-  }
+    async (reply: string | undefined): Promise<SessionState> => {
+      if (!reply) return state
+      let newState = await saveAnswerInDb(state, block)(reply)
+      return newState
+    }
 
 const saveVariableValueIfAny =
   (state: SessionState, block: InputBlock) =>
-  (reply: string): SessionState => {
-    if (!block.options?.variableId) return state
-    const foundVariable = state.typebotsQueue[0].typebot.variables.find(
-      (variable) => variable.id === block.options?.variableId
-    )
-    if (!foundVariable) return state
+    (reply: string): SessionState => {
+      if (!block.options?.variableId) return state
+      const foundVariable = state.typebotsQueue[0].typebot.variables.find(
+        (variable) => variable.id === block.options?.variableId
+      )
+      if (!foundVariable) return state
 
-    const { updatedState } = updateVariablesInSession({
-      newVariables: [
-        {
-          ...foundVariable,
-          value: Array.isArray(foundVariable.value)
-            ? foundVariable.value.concat(reply)
-            : reply,
-        },
-      ],
-      currentBlockId: undefined,
-      state,
-    })
+      const { updatedState } = updateVariablesInSession({
+        newVariables: [
+          {
+            ...foundVariable,
+            value: Array.isArray(foundVariable.value)
+              ? foundVariable.value.concat(reply)
+              : reply,
+          },
+        ],
+        currentBlockId: undefined,
+        state,
+      })
 
-    return updatedState
-  }
+      return updatedState
+    }
 
 const parseRetryMessage =
   (state: SessionState) =>
-  async (
-    block: InputBlock
-  ): Promise<Pick<ContinueChatResponse, 'messages' | 'input'>> => {
-    const retryMessage =
-      block.options &&
-      'retryMessageContent' in block.options &&
-      block.options.retryMessageContent
-        ? parseVariables(state.typebotsQueue[0].typebot.variables)(
+    async (
+      block: InputBlock
+    ): Promise<Pick<ContinueChatResponse, 'messages' | 'input'>> => {
+      const retryMessage =
+        block.options &&
+          'retryMessageContent' in block.options &&
+          block.options.retryMessageContent
+          ? parseVariables(state.typebotsQueue[0].typebot.variables)(
             block.options.retryMessageContent
           )
-        : parseDefaultRetryMessage(block)
-    return {
-      messages: [
-        {
-          id: block.id,
-          type: BubbleBlockType.TEXT,
-          content: {
-            richText: [{ type: 'p', children: [{ text: retryMessage }] }],
+          : parseDefaultRetryMessage(block)
+      return {
+        messages: [
+          {
+            id: block.id,
+            type: BubbleBlockType.TEXT,
+            content: {
+              richText: [{ type: 'p', children: [{ text: retryMessage }] }],
+            },
           },
-        },
-      ],
-      input: await parseInput(state)(block),
+        ],
+        input: await parseInput(state)(block),
+      }
     }
-  }
 
 const parseDefaultRetryMessage = (block: InputBlock): string => {
   switch (block.type) {
@@ -324,45 +325,45 @@ const parseDefaultRetryMessage = (block: InputBlock): string => {
 
 const saveAnswerInDb =
   (state: SessionState, block: InputBlock) =>
-  async (reply: string): Promise<SessionState> => {
-    let newSessionState = state
-    const groupId = state.typebotsQueue[0].typebot.groups.find((group) =>
-      group.blocks.some((blockInGroup) => blockInGroup.id === block.id)
-    )?.id
-    if (!groupId) throw new Error('saveAnswer: Group not found')
-    await saveAnswer({
-      answer: {
-        blockId: block.id,
-        content: reply,
-      },
-      reply,
-      state,
-    })
+    async (reply: string): Promise<SessionState> => {
+      let newSessionState = state
+      const groupId = state.typebotsQueue[0].typebot.groups.find((group) =>
+        group.blocks.some((blockInGroup) => blockInGroup.id === block.id)
+      )?.id
+      if (!groupId) throw new Error('saveAnswer: Group not found')
+      await saveAnswer({
+        answer: {
+          blockId: block.id,
+          content: reply,
+        },
+        reply,
+        state,
+      })
 
-    newSessionState = {
-      ...saveVariableValueIfAny(newSessionState, block)(reply),
-      previewMetadata: state.typebotsQueue[0].resultId
-        ? newSessionState.previewMetadata
-        : {
+      newSessionState = {
+        ...saveVariableValueIfAny(newSessionState, block)(reply),
+        previewMetadata: state.typebotsQueue[0].resultId
+          ? newSessionState.previewMetadata
+          : {
             ...newSessionState.previewMetadata,
             answers: (newSessionState.previewMetadata?.answers ?? []).concat({
               blockId: block.id,
               content: reply,
             }),
           },
-    }
+      }
 
-    const key = block.options?.variableId
-      ? newSessionState.typebotsQueue[0].typebot.variables.find(
+      const key = block.options?.variableId
+        ? newSessionState.typebotsQueue[0].typebot.variables.find(
           (variable) => variable.id === block.options?.variableId
         )?.name
-      : parseGroupKey(block.id, { state: newSessionState })
+        : parseGroupKey(block.id, { state: newSessionState })
 
-    return setNewAnswerInState(newSessionState)({
-      key: key ?? block.id,
-      value: reply,
-    })
-  }
+      return setNewAnswerInState(newSessionState)({
+        key: key ?? block.id,
+        value: reply,
+      })
+    }
 
 const parseGroupKey = (blockId: string, { state }: { state: SessionState }) => {
   const group = state.typebotsQueue[0].typebot.groups.find((group) =>
@@ -394,9 +395,9 @@ const setNewAnswerInState =
       typebotsQueue: state.typebotsQueue.map((typebot, index) =>
         index === 0
           ? {
-              ...typebot,
-              answers: newAnswers,
-            }
+            ...typebot,
+            answers: newAnswers,
+          }
           : typebot
       ),
     } satisfies SessionState
@@ -404,146 +405,166 @@ const setNewAnswerInState =
 
 const getOutgoingEdgeId =
   (state: Pick<SessionState, 'typebotsQueue'>) =>
-  (
-    block: Block,
-    reply: string | undefined
-  ): { edgeId: string | undefined; isOffDefaultPath: boolean } => {
-    const variables = state.typebotsQueue[0].typebot.variables
-    if (
-      block.type === InputBlockType.CHOICE &&
-      !(
-        block.options?.isMultipleChoice ??
-        defaultChoiceInputOptions.isMultipleChoice
-      ) &&
-      reply
-    ) {
-      const matchedItem = block.items.find(
-        (item) =>
-          parseVariables(variables)(item.content).normalize() ===
-          reply.normalize()
-      )
-      if (matchedItem?.outgoingEdgeId)
-        return { edgeId: matchedItem.outgoingEdgeId, isOffDefaultPath: true }
+    (
+      block: Block,
+      reply: string | undefined
+    ): { edgeId: string | undefined; isOffDefaultPath: boolean } => {
+      const variables = state.typebotsQueue[0].typebot.variables
+      if (
+        block.type === InputBlockType.CHOICE &&
+        !(
+          block.options?.isMultipleChoice ??
+          defaultChoiceInputOptions.isMultipleChoice
+        ) &&
+        reply
+      ) {
+        const matchedItem = block.items.find(
+          (item) =>
+            parseVariables(variables)(item.content).normalize() ===
+            reply.normalize()
+        )
+        if (matchedItem?.outgoingEdgeId)
+          return { edgeId: matchedItem.outgoingEdgeId, isOffDefaultPath: true }
+      }
+      if (
+        block.type === InputBlockType.CHOICE_UNCLICKABLE &&
+        !(
+          block.options?.isMultipleChoice ??
+          defaultChoiceInputOptions.isMultipleChoice
+        ) &&
+        reply
+      ) {
+        const matchedItem = block.items.find(
+          (item) =>
+            parseVariables(variables)(item.content).normalize() ===
+            reply.normalize()
+        )
+        if (matchedItem?.outgoingEdgeId)
+          return { edgeId: matchedItem.outgoingEdgeId, isOffDefaultPath: true }
+      }
+      if (
+        block.type === InputBlockType.PICTURE_CHOICE &&
+        !(
+          block.options?.isMultipleChoice ??
+          defaultPictureChoiceOptions.isMultipleChoice
+        ) &&
+        reply
+      ) {
+        const matchedItem = block.items.find(
+          (item) =>
+            parseVariables(variables)(item.title).normalize() ===
+            reply.normalize()
+        )
+        if (matchedItem?.outgoingEdgeId)
+          return { edgeId: matchedItem.outgoingEdgeId, isOffDefaultPath: true }
+      }
+      return { edgeId: block.outgoingEdgeId, isOffDefaultPath: false }
     }
-    if (
-      block.type === InputBlockType.PICTURE_CHOICE &&
-      !(
-        block.options?.isMultipleChoice ??
-        defaultPictureChoiceOptions.isMultipleChoice
-      ) &&
-      reply
-    ) {
-      const matchedItem = block.items.find(
-        (item) =>
-          parseVariables(variables)(item.title).normalize() ===
-          reply.normalize()
-      )
-      if (matchedItem?.outgoingEdgeId)
-        return { edgeId: matchedItem.outgoingEdgeId, isOffDefaultPath: true }
-    }
-    return { edgeId: block.outgoingEdgeId, isOffDefaultPath: false }
-  }
 
 const parseReply =
   (state: SessionState) =>
-  async (reply: Reply, block: InputBlock): Promise<ParsedReply> => {
-    if (reply && typeof reply !== 'string') {
-      if (block.type !== InputBlockType.FILE) return { status: 'fail' }
-      if (block.options?.visibility !== 'Public') {
+    async (reply: Reply, block: InputBlock): Promise<ParsedReply> => {
+      if (reply && typeof reply !== 'string') {
+        if (block.type !== InputBlockType.FILE) return { status: 'fail' }
+        if (block.options?.visibility !== 'Public') {
+          return {
+            status: 'success',
+            reply:
+              env.NEXTAUTH_URL +
+              `/api/typebots/${state.typebotsQueue[0].typebot.id}/whatsapp/media/${reply.mediaId}`,
+          }
+        }
+        const { file, mimeType } = await downloadMedia({
+          mediaId: reply.mediaId,
+          systemUserAccessToken: reply.accessToken,
+        })
+        const url = await uploadFileToBucket({
+          file,
+          key: `public/workspaces/${reply.workspaceId}/typebots/${state.typebotsQueue[0].typebot.id}/results/${state.typebotsQueue[0].resultId}/${reply.mediaId}`,
+          mimeType,
+        })
         return {
           status: 'success',
-          reply:
-            env.NEXTAUTH_URL +
-            `/api/typebots/${state.typebotsQueue[0].typebot.id}/whatsapp/media/${reply.mediaId}`,
+          reply: url,
         }
       }
-      const { file, mimeType } = await downloadMedia({
-        mediaId: reply.mediaId,
-        systemUserAccessToken: reply.accessToken,
-      })
-      const url = await uploadFileToBucket({
-        file,
-        key: `public/workspaces/${reply.workspaceId}/typebots/${state.typebotsQueue[0].typebot.id}/results/${state.typebotsQueue[0].resultId}/${reply.mediaId}`,
-        mimeType,
-      })
-      return {
-        status: 'success',
-        reply: url,
+      switch (block.type) {
+        case InputBlockType.EMAIL: {
+          if (!reply) return { status: 'fail' }
+          const formattedEmail = formatEmail(reply)
+          if (!formattedEmail) return { status: 'fail' }
+          return { status: 'success', reply: formattedEmail }
+        }
+        case InputBlockType.PHONE: {
+          if (!reply) return { status: 'fail' }
+          const formattedPhone = formatPhoneNumber(
+            reply,
+            block.options?.defaultCountryCode
+          )
+          if (!formattedPhone) return { status: 'fail' }
+          return { status: 'success', reply: formattedPhone }
+        }
+        case InputBlockType.URL: {
+          if (!reply) return { status: 'fail' }
+          const isValid = isURL(reply, { require_protocol: false })
+          if (!isValid) return { status: 'fail' }
+          return { status: 'success', reply: reply }
+        }
+        case InputBlockType.CHOICE: {
+          if (!reply) return { status: 'fail' }
+          return parseButtonsReply(state)(reply, block)
+        }
+        case InputBlockType.CHOICE_UNCLICKABLE: {
+          if (!reply) return { status: 'fail' }
+          return parseButtonsUnclickableReply(state)(reply, block)
+        }
+        case InputBlockType.NUMBER: {
+          if (!reply) return { status: 'fail' }
+          const isValid = validateNumber(reply, {
+            options: block.options,
+            variables: state.typebotsQueue[0].typebot.variables,
+          })
+          if (!isValid) return { status: 'fail' }
+          return { status: 'success', reply: parseNumber(reply) }
+        }
+        case InputBlockType.DATE: {
+          if (!reply) return { status: 'fail' }
+          return parseDateReply(reply, block)
+        }
+        case InputBlockType.FILE: {
+          if (!reply)
+            return block.options?.isRequired ?? defaultFileInputOptions.isRequired
+              ? { status: 'fail' }
+              : { status: 'skip' }
+          const urls = reply.split(', ')
+          const status = urls.some((url) =>
+            isURL(url, { require_tld: env.S3_ENDPOINT !== 'localhost' })
+          )
+            ? 'success'
+            : 'fail'
+          return { status, reply: reply }
+        }
+        case InputBlockType.PAYMENT: {
+          if (!reply) return { status: 'fail' }
+          if (reply === 'fail') return { status: 'fail' }
+          return { status: 'success', reply: reply }
+        }
+        case InputBlockType.RATING: {
+          if (!reply) return { status: 'fail' }
+          const isValid = validateRatingReply(reply, block)
+          if (!isValid) return { status: 'fail' }
+          return { status: 'success', reply: reply }
+        }
+        case InputBlockType.PICTURE_CHOICE: {
+          if (!reply) return { status: 'fail' }
+          return parsePictureChoicesReply(state)(reply, block)
+        }
+        case InputBlockType.TEXT: {
+          if (!reply) return { status: 'fail' }
+          return { status: 'success', reply: reply }
+        }
       }
     }
-    switch (block.type) {
-      case InputBlockType.EMAIL: {
-        if (!reply) return { status: 'fail' }
-        const formattedEmail = formatEmail(reply)
-        if (!formattedEmail) return { status: 'fail' }
-        return { status: 'success', reply: formattedEmail }
-      }
-      case InputBlockType.PHONE: {
-        if (!reply) return { status: 'fail' }
-        const formattedPhone = formatPhoneNumber(
-          reply,
-          block.options?.defaultCountryCode
-        )
-        if (!formattedPhone) return { status: 'fail' }
-        return { status: 'success', reply: formattedPhone }
-      }
-      case InputBlockType.URL: {
-        if (!reply) return { status: 'fail' }
-        const isValid = isURL(reply, { require_protocol: false })
-        if (!isValid) return { status: 'fail' }
-        return { status: 'success', reply: reply }
-      }
-      case InputBlockType.CHOICE: {
-        if (!reply) return { status: 'fail' }
-        return parseButtonsReply(state)(reply, block)
-      }
-      case InputBlockType.NUMBER: {
-        if (!reply) return { status: 'fail' }
-        const isValid = validateNumber(reply, {
-          options: block.options,
-          variables: state.typebotsQueue[0].typebot.variables,
-        })
-        if (!isValid) return { status: 'fail' }
-        return { status: 'success', reply: parseNumber(reply) }
-      }
-      case InputBlockType.DATE: {
-        if (!reply) return { status: 'fail' }
-        return parseDateReply(reply, block)
-      }
-      case InputBlockType.FILE: {
-        if (!reply)
-          return block.options?.isRequired ?? defaultFileInputOptions.isRequired
-            ? { status: 'fail' }
-            : { status: 'skip' }
-        const urls = reply.split(', ')
-        const status = urls.some((url) =>
-          isURL(url, { require_tld: env.S3_ENDPOINT !== 'localhost' })
-        )
-          ? 'success'
-          : 'fail'
-        return { status, reply: reply }
-      }
-      case InputBlockType.PAYMENT: {
-        if (!reply) return { status: 'fail' }
-        if (reply === 'fail') return { status: 'fail' }
-        return { status: 'success', reply: reply }
-      }
-      case InputBlockType.RATING: {
-        if (!reply) return { status: 'fail' }
-        const isValid = validateRatingReply(reply, block)
-        if (!isValid) return { status: 'fail' }
-        return { status: 'success', reply: reply }
-      }
-      case InputBlockType.PICTURE_CHOICE: {
-        if (!reply) return { status: 'fail' }
-        return parsePictureChoicesReply(state)(reply, block)
-      }
-      case InputBlockType.TEXT: {
-        if (!reply) return { status: 'fail' }
-        return { status: 'success', reply: reply }
-      }
-    }
-  }
 
 export const safeJsonParse = (value: string): unknown => {
   try {

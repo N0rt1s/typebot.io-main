@@ -14,6 +14,7 @@ import {
   IntegrationBlock,
   HttpRequestBlock,
   BlockWithOptionsType,
+  ChoiceUnclickableInputBlock,
 } from './features/blocks'
 import { BubbleBlockType } from './features/blocks/bubbles/constants'
 import { defaultChoiceInputOptions } from './features/blocks/inputs/choice/constants'
@@ -45,12 +46,23 @@ export const isTextInputBlock = (block: Block): block is TextInputBlock =>
 export const isChoiceInput = (block: Block): block is ChoiceInputBlock =>
   block.type === InputBlockType.CHOICE
 
+export const isChoiceUnclickableInput = (block: Block): block is ChoiceUnclickableInputBlock =>
+  block.type === InputBlockType.CHOICE_UNCLICKABLE
+
 export const isPictureChoiceInput = (
   block: Block
 ): block is PictureChoiceBlock => block.type === InputBlockType.PICTURE_CHOICE
 
 export const isSingleChoiceInput = (block: Block): block is ChoiceInputBlock =>
   block.type === InputBlockType.CHOICE &&
+  'options' in block &&
+  !(
+    block.options?.isMultipleChoice ??
+    defaultChoiceInputOptions.isMultipleChoice
+  )
+
+export const isSingleChoiceUnclickableInput = (block: Block): block is ChoiceUnclickableInputBlock =>
+  block.type === InputBlockType.CHOICE_UNCLICKABLE &&
   'options' in block &&
   !(
     block.options?.isMultipleChoice ??
@@ -91,9 +103,11 @@ export const blockTypeHasItems = (
 ): type is
   | LogicBlockType.CONDITION
   | InputBlockType.CHOICE
+  | InputBlockType.CHOICE_UNCLICKABLE
   | LogicBlockType.AB_TEST =>
   type === LogicBlockType.CONDITION ||
   type === InputBlockType.CHOICE ||
+  type === InputBlockType.CHOICE_UNCLICKABLE ||
   type === LogicBlockType.AB_TEST ||
   type === InputBlockType.PICTURE_CHOICE
 

@@ -10,11 +10,13 @@ import { ratingInputBlockSchema } from './rating'
 import { textInputSchema } from './text'
 import { urlInputSchema } from './url'
 import { fileInputBlockSchemas } from './file'
+import { buttonsUnclickableInputSchemas } from './choiceUnclickable'
 
 export const inputBlockSchemas = {
   v5: [
     textInputSchema,
     buttonsInputSchemas.v5,
+    buttonsUnclickableInputSchemas.v5,
     emailInputSchema,
     numberInputSchema,
     urlInputSchema,
@@ -28,6 +30,7 @@ export const inputBlockSchemas = {
   v6: [
     textInputSchema,
     buttonsInputSchemas.v6,
+    buttonsUnclickableInputSchemas.v6,
     emailInputSchema,
     numberInputSchema,
     urlInputSchema,

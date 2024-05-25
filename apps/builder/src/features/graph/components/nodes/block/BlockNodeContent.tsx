@@ -39,6 +39,7 @@ import { LogicBlockType } from '@typebot.io/schemas/features/blocks/logic/consta
 import { IntegrationBlockType } from '@typebot.io/schemas/features/blocks/integrations/constants'
 import { ForgedBlockNodeContent } from '@/features/forge/components/ForgedBlockNodeContent'
 import { OpenAINodeBody } from '@/features/blocks/integrations/openai/components/OpenAINodeBody'
+import { ButtonsUnclickableBlockNode } from '@/features/blocks/inputs/buttonsUnclickable/components/ButtonsUnclickableBlockNode'
 
 type Props = {
   block: BlockV6
@@ -80,6 +81,9 @@ export const BlockNodeContent = ({
     }
     case InputBlockType.CHOICE: {
       return <ButtonsBlockNode block={block} indices={indices} />
+    }
+    case InputBlockType.CHOICE_UNCLICKABLE: {
+      return <ButtonsUnclickableBlockNode block={block} indices={indices} />
     }
     case InputBlockType.PICTURE_CHOICE: {
       return <PictureChoiceNode block={block} indices={indices} />

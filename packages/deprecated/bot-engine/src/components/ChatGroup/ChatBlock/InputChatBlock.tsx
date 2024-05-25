@@ -20,6 +20,7 @@ import { FileUploadForm } from '@/features/blocks/inputs/fileUpload'
 import { defaultSettings } from '@typebot.io/schemas/features/typebot/settings/constants'
 import { InputBlockType } from '@typebot.io/schemas/features/blocks/inputs/constants'
 import { getBlockById } from '@typebot.io/schemas/helpers'
+import { ChoiceUnclickableForm } from '@/features/blocks/inputs/buttonsUnclickable'
 
 export const InputChatBlock = ({
   block,
@@ -46,11 +47,11 @@ export const InputChatBlock = ({
   const defaultValue =
     (typebot.settings.general?.isInputPrefillEnabled ??
       defaultSettings.general.isInputPrefillEnabled) &&
-    variableId
+      variableId
       ? typebot.variables.find(
-          (variable) =>
-            variable.name === typebot.variables.find(byId(variableId))?.name
-        )?.value
+        (variable) =>
+          variable.name === typebot.variables.find(byId(variableId))?.name
+      )?.value
       : undefined
 
   const handleSubmit = async ({ label, value, itemId }: InputSubmitContent) => {
@@ -163,6 +164,8 @@ const Input = ({
       return <DateForm options={block.options} onSubmit={onSubmit} />
     case InputBlockType.CHOICE:
       return <ChoiceForm block={block} onSubmit={onSubmit} />
+    case InputBlockType.CHOICE_UNCLICKABLE:
+      return <ChoiceUnclickableForm block={block} onSubmit={onSubmit} />
     case InputBlockType.PAYMENT:
       return (
         <PaymentForm

@@ -45,6 +45,7 @@ import { IntegrationBlockType } from '@typebot.io/schemas/features/blocks/integr
 import { LogicBlockType } from '@typebot.io/schemas/features/blocks/logic/constants'
 import { ForgedBlockSettings } from '../../../../forge/components/ForgedBlockSettings'
 import { OpenAISettings } from '@/features/blocks/integrations/openai/components/OpenAISettings'
+import { ButtonsUnclickableBlockSettings } from '@/features/blocks/inputs/buttonsUnclickable/components/ButtonsUnclickableBlockSettings'
 
 type Props = {
   block: BlockWithOptions
@@ -166,6 +167,14 @@ export const BlockSettings = ({
     case InputBlockType.CHOICE: {
       return (
         <ButtonsBlockSettings
+          options={block.options}
+          onOptionsChange={updateOptions}
+        />
+      )
+    }
+    case InputBlockType.CHOICE_UNCLICKABLE: {
+      return (
+        <ButtonsUnclickableBlockSettings
           options={block.options}
           onOptionsChange={updateOptions}
         />

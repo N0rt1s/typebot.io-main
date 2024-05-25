@@ -46,22 +46,22 @@ export const edgesAction = (setTypebot: SetTypebot): EdgesActions => ({
           )
           const itemIndex = edge.from.itemId
             ? (
-                typebot.groups[groupIndex].blocks[blockIndex] as
-                  | BlockWithItems
-                  | undefined
-              )?.items.findIndex(byId(edge.from.itemId))
+              typebot.groups[groupIndex].blocks[blockIndex] as
+              | BlockWithItems
+              | undefined
+            )?.items.findIndex(byId(edge.from.itemId))
             : null
 
           isDefined(itemIndex) && itemIndex !== -1
             ? addEdgeIdToItem(typebot, newEdge.id, {
-                groupIndex,
-                blockIndex,
-                itemIndex,
-              })
+              groupIndex,
+              blockIndex,
+              itemIndex,
+            })
             : addEdgeIdToBlock(typebot, newEdge.id, {
-                groupIndex,
-                blockIndex,
-              })
+              groupIndex,
+              blockIndex,
+            })
 
           const block = typebot.groups[groupIndex].blocks[blockIndex]
           if (isDefined(itemIndex) && isDefined(block.outgoingEdgeId)) {
@@ -71,6 +71,7 @@ export const edgesAction = (setTypebot: SetTypebot): EdgesActions => ({
             if (
               areAllItemsConnected &&
               (block.type === InputBlockType.CHOICE ||
+                block.type === InputBlockType.CHOICE_UNCLICKABLE ||
                 block.type === InputBlockType.PICTURE_CHOICE)
             ) {
               deleteEdgeDraft({
@@ -120,9 +121,9 @@ const addEdgeIdToItem = (
   edgeId: string,
   { groupIndex, blockIndex, itemIndex }: ItemIndices
 ) =>
-  ((typebot.groups[groupIndex].blocks[blockIndex] as BlockWithItems).items[
-    itemIndex
-  ].outgoingEdgeId = edgeId)
+((typebot.groups[groupIndex].blocks[blockIndex] as BlockWithItems).items[
+  itemIndex
+].outgoingEdgeId = edgeId)
 
 export const deleteEdgeDraft = ({
   typebot,
@@ -179,7 +180,7 @@ const deleteOutgoingEdgeIdProps = ({
       ? block.items?.findIndex(byId(edge.from.itemId))
       : -1
   if (fromItemIndex !== -1) {
-    ;(
+    ; (
       typebot.groups[fromGroupIndex].blocks[fromBlockIndex] as BlockWithItems
     ).items[fromItemIndex ?? 0].outgoingEdgeId = undefined
   } else if (fromBlockIndex !== -1)

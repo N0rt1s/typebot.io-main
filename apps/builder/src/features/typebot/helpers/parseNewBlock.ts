@@ -8,6 +8,8 @@ const parseDefaultItems = (type: BlockWithItems['type']): ItemV6[] => {
   switch (type) {
     case InputBlockType.CHOICE:
       return [{ id: createId() }]
+    case InputBlockType.CHOICE_UNCLICKABLE:
+      return [{ id: createId() }]
     case InputBlockType.PICTURE_CHOICE:
       return [{ id: createId() }]
     case LogicBlockType.CONDITION:
@@ -25,10 +27,10 @@ const parseDefaultItems = (type: BlockWithItems['type']): ItemV6[] => {
 }
 
 export const parseNewBlock = (type: BlockV6['type']) =>
-  ({
-    id: createId(),
-    type,
-    ...(blockTypeHasItems(type)
-      ? { items: parseDefaultItems(type) }
-      : undefined),
-  } as BlockV6)
+({
+  id: createId(),
+  type,
+  ...(blockTypeHasItems(type)
+    ? { items: parseDefaultItems(type) }
+    : undefined),
+} as BlockV6)

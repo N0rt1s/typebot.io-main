@@ -7,6 +7,7 @@ import {
   isBubbleBlock,
   isBubbleBlockType,
   isChoiceInput,
+  isChoiceUnclickableInput,
   isInputBlock,
   isIntegrationBlock,
   isLogicBlock,
@@ -81,28 +82,28 @@ export const ChatGroup = ({
       const lastBlockType = getLastChatBlockType(processedBlocks)
       lastBlockType && isBubbleBlockType(lastBlockType)
         ? setDisplayedChunks(
-            displayedChunks.map((c, idx) =>
-              idx === displayedChunks.length - 1
-                ? { bubbles: [...c.bubbles, nextBlock] }
-                : c
-            )
+          displayedChunks.map((c, idx) =>
+            idx === displayedChunks.length - 1
+              ? { bubbles: [...c.bubbles, nextBlock] }
+              : c
           )
+        )
         : setDisplayedChunks([...displayedChunks, { bubbles: [nextBlock] }])
     }
     if (isInputBlock(nextBlock)) {
       displayedChunks.length === 0 ||
-      isDefined(displayedChunks[displayedChunks.length - 1].input)
+        isDefined(displayedChunks[displayedChunks.length - 1].input)
         ? setDisplayedChunks([
-            ...displayedChunks,
-            { bubbles: [], input: nextBlock },
-          ])
+          ...displayedChunks,
+          { bubbles: [], input: nextBlock },
+        ])
         : setDisplayedChunks(
-            displayedChunks.map((c, idx) =>
-              idx === displayedChunks.length - 1
-                ? { ...c, input: nextBlock }
-                : c
-            )
+          displayedChunks.map((c, idx) =>
+            idx === displayedChunks.length - 1
+              ? { ...c, input: nextBlock }
+              : c
           )
+        )
     }
   }
 
@@ -201,6 +202,15 @@ export const ChatGroup = ({
       const isSingleChoiceBlock =
         isChoiceInput(currentBlock) && !currentBlock.options?.isMultipleChoice
       if (isSingleChoiceBlock) {
+        const nextEdgeId = currentBlock.items.find(
+          byId(answerContent?.itemId)
+        )?.outgoingEdgeId
+        if (nextEdgeId) return onGroupEnd({ edgeId: nextEdgeId })
+      }
+
+      const isSingleChoiceUnclickableBlock =
+        isChoiceUnclickableInput(currentBlock) && !currentBlock.options?.isMultipleChoice
+      if (isSingleChoiceUnclickableBlock) {
         const nextEdgeId = currentBlock.items.find(
           byId(answerContent?.itemId)
         )?.outgoingEdgeId

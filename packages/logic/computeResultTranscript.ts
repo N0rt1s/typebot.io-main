@@ -25,13 +25,13 @@ import { parseVariables } from '@typebot.io/variables/parseVariables'
 
 type TranscriptMessage =
   | {
-      role: 'bot' | 'user'
-    } & (
-      | { type: 'text'; text: string }
-      | { type: 'image'; image: string }
-      | { type: 'video'; video: string }
-      | { type: 'audio'; audio: string }
-    )
+    role: 'bot' | 'user'
+  } & (
+    | { type: 'text'; text: string }
+    | { type: 'image'; image: string }
+    | { type: 'video'; video: string }
+    | { type: 'audio'; audio: string }
+  )
 
 export const parseTranscriptMessageText = (
   message: TranscriptMessage
@@ -111,11 +111,11 @@ const executeGroup = ({
 }: {
   currentTranscript: TranscriptMessage[]
   nextGroup:
-    | {
-        group: Group
-        blockIndex?: number | undefined
-      }
-    | undefined
+  | {
+    group: Group
+    blockIndex?: number | undefined
+  }
+  | undefined
   typebotsQueue: {
     typebot: TypebotInSession
     resumeEdgeId?: string
@@ -252,9 +252,9 @@ const executeGroup = ({
           {
             typebot: resumeEdge
               ? {
-                  ...typebotsQueue[0].typebot,
-                  edges: typebotsQueue[0].typebot.edges.concat([resumeEdge]),
-                }
+                ...typebotsQueue[0].typebot,
+                edges: typebotsQueue[0].typebot.edges.concat([resumeEdge]),
+              }
               : typebotsQueue[0].typebot,
           },
         ],
@@ -370,6 +370,22 @@ const getOutgoingEdgeId = ({
 }): { edgeId: string | undefined; isOffDefaultPath: boolean } => {
   if (
     block.type === InputBlockType.CHOICE &&
+    !(
+      block.options?.isMultipleChoice ??
+      defaultChoiceInputOptions.isMultipleChoice
+    ) &&
+    answer
+  ) {
+    const matchedItem = block.items.find(
+      (item) =>
+        parseVariables(variables)(item.content).normalize() ===
+        answer.normalize()
+    )
+    if (matchedItem?.outgoingEdgeId)
+      return { edgeId: matchedItem.outgoingEdgeId, isOffDefaultPath: true }
+  }
+  if (
+    block.type === InputBlockType.CHOICE_UNCLICKABLE &&
     !(
       block.options?.isMultipleChoice ??
       defaultChoiceInputOptions.isMultipleChoice

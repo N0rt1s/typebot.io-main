@@ -32,6 +32,7 @@ import {
   BubbleBlockWithDefinedContent,
   parseBubbleBlock,
 } from './parseBubbleBlock'
+import { injectVariableValuesInButtonsUnclickableInputBlock } from './blocks/inputs/buttonsUnclickable/injectVariableValuesInButtonsUnclickableInputBlock'
 
 type ContextProps = {
   version: 1 | 2
@@ -121,8 +122,8 @@ export const executeGroup = async (
       isLogicBlock(block)
         ? await executeLogic(newSessionState)(block)
         : isIntegrationBlock(block)
-        ? await executeIntegration(newSessionState)(block)
-        : null
+          ? await executeIntegration(newSessionState)(block)
+          : null
     ) as ExecuteLogicResponse | ExecuteIntegrationResponse | null
 
     if (!executionResponse) continue
@@ -255,85 +256,88 @@ export const executeGroup = async (
 
 const computeRuntimeOptions =
   (state: SessionState) =>
-  (block: InputBlock): Promise<RuntimeOptions> | undefined => {
-    switch (block.type) {
-      case InputBlockType.PAYMENT: {
-        return computePaymentInputRuntimeOptions(state)(block.options)
+    (block: InputBlock): Promise<RuntimeOptions> | undefined => {
+      switch (block.type) {
+        case InputBlockType.PAYMENT: {
+          return computePaymentInputRuntimeOptions(state)(block.options)
+        }
       }
     }
-  }
 
 export const parseInput =
   (state: SessionState) =>
-  async (block: InputBlock): Promise<ContinueChatResponse['input']> => {
-    switch (block.type) {
-      case InputBlockType.CHOICE: {
-        return injectVariableValuesInButtonsInputBlock(state)(block)
-      }
-      case InputBlockType.PICTURE_CHOICE: {
-        return injectVariableValuesInPictureChoiceBlock(
-          state.typebotsQueue[0].typebot.variables
-        )(block)
-      }
-      case InputBlockType.NUMBER: {
-        const parsedBlock = deepParseVariables(
-          state.typebotsQueue[0].typebot.variables,
-          { removeEmptyStrings: true }
-        )({
-          ...block,
-          prefilledValue: getPrefilledInputValue(
-            state.typebotsQueue[0].typebot.variables
-          )(block),
-        })
-        return {
-          ...parsedBlock,
-          options: {
-            ...parsedBlock.options,
-            min: isNotEmpty(parsedBlock.options?.min as string)
-              ? Number(parsedBlock.options?.min)
-              : undefined,
-            max: isNotEmpty(parsedBlock.options?.max as string)
-              ? Number(parsedBlock.options?.max)
-              : undefined,
-            step: isNotEmpty(parsedBlock.options?.step as string)
-              ? Number(parsedBlock.options?.step)
-              : undefined,
-          },
+    async (block: InputBlock): Promise<ContinueChatResponse['input']> => {
+      switch (block.type) {
+        case InputBlockType.CHOICE: {
+          return injectVariableValuesInButtonsInputBlock(state)(block)
         }
-      }
-      case InputBlockType.DATE: {
-        return parseDateInput(state)(block)
-      }
-      case InputBlockType.RATING: {
-        const parsedBlock = deepParseVariables(
-          state.typebotsQueue[0].typebot.variables,
-          { removeEmptyStrings: true }
-        )({
-          ...block,
-          prefilledValue: getPrefilledInputValue(
-            state.typebotsQueue[0].typebot.variables
-          )(block),
-        })
-        return {
-          ...parsedBlock,
-          options: {
-            ...parsedBlock.options,
-            startsAt: isNotEmpty(parsedBlock.options?.startsAt as string)
-              ? Number(parsedBlock.options?.startsAt)
-              : undefined,
-          },
+        case InputBlockType.CHOICE_UNCLICKABLE: {
+          return injectVariableValuesInButtonsUnclickableInputBlock(state)(block)
         }
-      }
-      default: {
-        return deepParseVariables(state.typebotsQueue[0].typebot.variables, {
-          removeEmptyStrings: true,
-        })({
-          ...block,
-          runtimeOptions: await computeRuntimeOptions(state)(block),
-          prefilledValue: getPrefilledInputValue(
+        case InputBlockType.PICTURE_CHOICE: {
+          return injectVariableValuesInPictureChoiceBlock(
             state.typebotsQueue[0].typebot.variables
-          )(block),
-        })
+          )(block)
+        }
+        case InputBlockType.NUMBER: {
+          const parsedBlock = deepParseVariables(
+            state.typebotsQueue[0].typebot.variables,
+            { removeEmptyStrings: true }
+          )({
+            ...block,
+            prefilledValue: getPrefilledInputValue(
+              state.typebotsQueue[0].typebot.variables
+            )(block),
+          })
+          return {
+            ...parsedBlock,
+            options: {
+              ...parsedBlock.options,
+              min: isNotEmpty(parsedBlock.options?.min as string)
+                ? Number(parsedBlock.options?.min)
+                : undefined,
+              max: isNotEmpty(parsedBlock.options?.max as string)
+                ? Number(parsedBlock.options?.max)
+                : undefined,
+              step: isNotEmpty(parsedBlock.options?.step as string)
+                ? Number(parsedBlock.options?.step)
+                : undefined,
+            },
+          }
+        }
+        case InputBlockType.DATE: {
+          return parseDateInput(state)(block)
+        }
+        case InputBlockType.RATING: {
+          const parsedBlock = deepParseVariables(
+            state.typebotsQueue[0].typebot.variables,
+            { removeEmptyStrings: true }
+          )({
+            ...block,
+            prefilledValue: getPrefilledInputValue(
+              state.typebotsQueue[0].typebot.variables
+            )(block),
+          })
+          return {
+            ...parsedBlock,
+            options: {
+              ...parsedBlock.options,
+              startsAt: isNotEmpty(parsedBlock.options?.startsAt as string)
+                ? Number(parsedBlock.options?.startsAt)
+                : undefined,
+            },
+          }
+        }
+        default: {
+          return deepParseVariables(state.typebotsQueue[0].typebot.variables, {
+            removeEmptyStrings: true,
+          })({
+            ...block,
+            runtimeOptions: await computeRuntimeOptions(state)(block),
+            prefilledValue: getPrefilledInputValue(
+              state.typebotsQueue[0].typebot.variables
+            )(block),
+          })
+        }
       }
     }
-  }

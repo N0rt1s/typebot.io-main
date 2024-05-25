@@ -13,5 +13,14 @@
   "typescript.updateImportsOnFileMove.enabled": "always",
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
   }
 }

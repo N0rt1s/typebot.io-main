@@ -1,9 +1,11 @@
 import { ButtonsItemNode } from '@/features/blocks/inputs/buttons/components/ButtonsItemNode'
+import { ButtonsUnclickableItemNode } from '@/features/blocks/inputs/buttonsUnclickable/components/ButtonsUnclickableItemNode'
 import { PictureChoiceItemNode } from '@/features/blocks/inputs/pictureChoice/components/PictureChoiceItemNode'
 import { ConditionItemNode } from '@/features/blocks/logic/condition/components/ConditionItemNode'
 import {
   BlockWithItems,
   ButtonItem,
+  ButtonUnclickableItem,
   ConditionItem,
   Item,
   ItemIndices,
@@ -31,6 +33,15 @@ export const ItemNodeContent = ({
         <ButtonsItemNode
           item={item as ButtonItem}
           key={`${item.id}-${(item as ButtonItem).content}`}
+          isMouseOver={isMouseOver}
+          indices={indices}
+        />
+      )
+    case InputBlockType.CHOICE_UNCLICKABLE:
+      return (
+        <ButtonsUnclickableItemNode
+          item={item as ButtonUnclickableItem}
+          key={`${item.id}-${(item as ButtonUnclickableItem).content}`}
           isMouseOver={isMouseOver}
           indices={indices}
         />

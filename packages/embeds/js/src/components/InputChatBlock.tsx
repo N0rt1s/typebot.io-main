@@ -13,6 +13,7 @@ import type {
   PictureChoiceBlock,
   PaymentInputBlock,
   DateInputBlock,
+  ChoiceUnclickableInputBlock,
 } from '@typebot.io/schemas'
 import { GuestBubble } from './bubbles/GuestBubble'
 import { BotContext, InputSubmitContent } from '@/types'
@@ -37,6 +38,7 @@ import { InputBlockType } from '@typebot.io/schemas/features/blocks/inputs/const
 import { defaultPaymentInputOptions } from '@typebot.io/schemas/features/blocks/inputs/payment/constants'
 import { persist } from '@/utils/persist'
 import { defaultGuestAvatarIsEnabled } from '@typebot.io/schemas/features/typebot/theme/constants'
+import { ButtonsUnclickable } from '@/features/blocks/inputs/buttonsUnclickable/components/ButtonsUnclickable'
 
 type Props = {
   ref: HTMLDivElement | undefined
@@ -209,6 +211,27 @@ const Input = (props: {
           </Switch>
         )}
       </Match>
+      <Match when={isButtonsUnclickableBlock(props.block)} keyed>
+        {(block) => (
+          <Switch>
+            <Match when={!block.options?.isMultipleChoice}>
+              <ButtonsUnclickable
+                chunkIndex={props.chunkIndex}
+                defaultItems={block.items}
+                options={block.options}
+                onSubmit={onSubmit}
+              />
+            </Match>
+            <Match when={block.options?.isMultipleChoice}>
+              <MultipleChoicesForm
+                defaultItems={block.items}
+                options={block.options}
+                onSubmit={onSubmit}
+              />
+            </Match>
+          </Switch>
+        )}
+      </Match>
       <Match when={isPictureChoiceBlock(props.block)} keyed>
         {(block) => (
           <Switch>
@@ -267,6 +290,11 @@ const isButtonsBlock = (
   block: ContinueChatResponse['input']
 ): ChoiceInputBlock | undefined =>
   block?.type === InputBlockType.CHOICE ? block : undefined
+
+const isButtonsUnclickableBlock = (
+  block: ContinueChatResponse['input']
+): ChoiceUnclickableInputBlock | undefined =>
+  block?.type === InputBlockType.CHOICE_UNCLICKABLE ? block : undefined
 
 const isPictureChoiceBlock = (
   block: ContinueChatResponse['input']

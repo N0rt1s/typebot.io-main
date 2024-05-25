@@ -231,6 +231,9 @@
                                   "$ref": "#/components/schemas/buttonsInputV5"
                                 },
                                 {
+                                  "$ref": "#/components/schemas/buttonsUnclickableInputV5"
+                                },
+                                {
                                   "$ref": "#/components/schemas/email"
                                 },
                                 {
@@ -263,6 +266,7 @@
                                 "mapping": {
                                   "text input": "#/components/schemas/textInput",
                                   "choice input": "#/components/schemas/buttonsInputV5",
+                                  "choice Unclickable input": "#/components/schemas/buttonsUnclickableInputV5",
                                   "email input": "#/components/schemas/email",
                                   "number input": "#/components/schemas/numberInput",
                                   "url input": "#/components/schemas/url",
@@ -741,6 +745,9 @@
                                   "$ref": "#/components/schemas/buttonsInputV5"
                                 },
                                 {
+                                  "$ref": "#/components/schemas/buttonsUnclickableInputV5"
+                                },
+                                {
                                   "$ref": "#/components/schemas/email"
                                 },
                                 {
@@ -773,6 +780,7 @@
                                 "mapping": {
                                   "text input": "#/components/schemas/textInput",
                                   "choice input": "#/components/schemas/buttonsInputV5",
+                                  "choice Unclickable input": "#/components/schemas/buttonsUnclickableInputV5",
                                   "email input": "#/components/schemas/email",
                                   "number input": "#/components/schemas/numberInput",
                                   "url input": "#/components/schemas/url",
@@ -1240,6 +1248,9 @@
                                   "$ref": "#/components/schemas/buttonsInputV5"
                                 },
                                 {
+                                  "$ref": "#/components/schemas/buttonsUnclickableInputV5"
+                                },
+                                {
                                   "$ref": "#/components/schemas/fileInputV5"
                                 },
                                 {
@@ -1250,6 +1261,7 @@
                                 "propertyName": "type",
                                 "mapping": {
                                   "choice input": "#/components/schemas/buttonsInputV5",
+                                  "choice Unclickable input": "#/components/schemas/buttonsUnclickableInputV5",
                                   "file input": "#/components/schemas/fileInputV5",
                                   "picture choice input": "#/components/schemas/pictureChoiceV5"
                                 }
@@ -1573,6 +1585,9 @@
                                   "$ref": "#/components/schemas/buttonsInputV5"
                                 },
                                 {
+                                  "$ref": "#/components/schemas/buttonsUnclickableInputV5"
+                                },
+                                {
                                   "$ref": "#/components/schemas/fileInputV5"
                                 },
                                 {
@@ -1583,6 +1598,7 @@
                                 "propertyName": "type",
                                 "mapping": {
                                   "choice input": "#/components/schemas/buttonsInputV5",
+                                  "choice Unclickable input": "#/components/schemas/buttonsUnclickableInputV5",
                                   "file input": "#/components/schemas/fileInputV5",
                                   "picture choice input": "#/components/schemas/pictureChoiceV5"
                                 }
@@ -2010,6 +2026,9 @@
                                   "$ref": "#/components/schemas/buttonsInputV5"
                                 },
                                 {
+                                  "$ref": "#/components/schemas/buttonsUnclickableInputV5"
+                                },
+                                {
                                   "$ref": "#/components/schemas/fileInputV5"
                                 },
                                 {
@@ -2020,6 +2039,7 @@
                                 "propertyName": "type",
                                 "mapping": {
                                   "choice input": "#/components/schemas/buttonsInputV5",
+                                  "choice Unclickable input": "#/components/schemas/buttonsUnclickableInputV5",
                                   "file input": "#/components/schemas/fileInputV5",
                                   "picture choice input": "#/components/schemas/pictureChoiceV5"
                                 }
@@ -3411,6 +3431,9 @@
                       },
                       {
                         "$ref": "#/components/schemas/buttonsInputV5"
+                      },
+                      {
+                        "$ref": "#/components/schemas/buttonsUnclickableInputV5"
                       },
                       {
                         "$ref": "#/components/schemas/email"
@@ -5773,6 +5796,132 @@
             "type": "string",
             "enum": [
               "choice input"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "blockId": {
+                  "type": "string"
+                },
+                "outgoingEdgeId": {
+                  "type": "string"
+                },
+                "content": {
+                  "type": "string"
+                },
+                "displayCondition": {
+                  "type": "object",
+                  "properties": {
+                    "isEnabled": {
+                      "type": "boolean"
+                    },
+                    "condition": {
+                      "type": "object",
+                      "properties": {
+                        "logicalOperator": {
+                          "type": "string",
+                          "enum": [
+                            "OR",
+                            "AND"
+                          ]
+                        },
+                        "comparisons": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "variableId": {
+                                "type": "string"
+                              },
+                              "comparisonOperator": {
+                                "type": "string",
+                                "enum": [
+                                  "Equal to",
+                                  "Not equal",
+                                  "Contains",
+                                  "Does not contain",
+                                  "Greater than",
+                                  "Less than",
+                                  "Is set",
+                                  "Is empty",
+                                  "Starts with",
+                                  "Ends with",
+                                  "Matches regex",
+                                  "Does not match regex"
+                                ]
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "variableId": {
+                "type": "string"
+              },
+              "isMultipleChoice": {
+                "type": "boolean"
+              },
+              "buttonLabel": {
+                "type": "string"
+              },
+              "dynamicVariableId": {
+                "type": "string"
+              },
+              "isSearchable": {
+                "type": "boolean"
+              },
+              "searchInputPlaceholder": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "items"
+        ],
+        "title": "Buttons v5"
+      },
+      "buttonsUnclickableInputV5": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "outgoingEdgeId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "choice Unclickable input"
             ]
           },
           "items": {
