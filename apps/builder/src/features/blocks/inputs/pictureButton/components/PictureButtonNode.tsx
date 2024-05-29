@@ -55,26 +55,11 @@ export const PictureButtonNode = ({ block, indices }: Props) => {
       ) : (
         <>
           <Stack>
-            {/* <FormLabel mb="0" htmlFor="variable">
-              Question
-            </FormLabel>
-            <Input
-              data-testid="question-input"
-              ref={questionRef}
-              // value={questionValue}
-              onChange={onInputChange}
-              placeholder={"What is your Name?"}
-              autoComplete="off"
-            // {...InputProps}
-            />
-            <Editable defaultValue='Take some chakra'>
-              <EditablePreview />
-              <EditableTextarea />
-            </Editable> */}
             <Textarea
               data-testid="question-input"
               // label="Question"
               // defaultValue="asd"
+              defaultValue={block.question}
               placeholder={"Ask a question"}
               onChange={onInputChange}
               onBlur={onInputSubmit}
