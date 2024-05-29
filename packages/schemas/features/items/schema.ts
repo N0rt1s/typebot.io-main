@@ -5,6 +5,7 @@ import {
   pictureChoiceItemSchemas,
   aItemSchemas,
   bItemSchemas,
+  pictureButtonItemSchemas,
 } from '../blocks'
 
 const itemSchemas = {
@@ -12,6 +13,7 @@ const itemSchemas = {
     buttonItemSchemas.v5,
     conditionItemSchemas.v5,
     pictureChoiceItemSchemas.v5,
+    pictureButtonItemSchemas.v5,
     aItemSchemas.v5,
     bItemSchemas.v5,
   ]),
@@ -19,6 +21,7 @@ const itemSchemas = {
     buttonItemSchemas.v6,
     conditionItemSchemas.v6,
     pictureChoiceItemSchemas.v6,
+    pictureButtonItemSchemas.v6,
     aItemSchemas.v6,
     bItemSchemas.v6,
   ]),

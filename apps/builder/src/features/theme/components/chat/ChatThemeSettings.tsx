@@ -55,6 +55,9 @@ export const ChatThemeSettings = ({
   const updateButtons = (buttons: NonNullable<Theme['chat']>['buttons']) =>
     onChatThemeChange({ ...chatTheme, buttons })
 
+  const updateButtonsUnclickable = (buttonsUnclickable: NonNullable<Theme['chat']>['buttonsUnclickable']) =>
+    onChatThemeChange({ ...chatTheme, buttonsUnclickable })
+
   const updateInputs = (inputs: NonNullable<Theme['chat']>['inputs']) =>
     onChatThemeChange({ ...chatTheme, inputs })
 
@@ -141,11 +144,32 @@ export const ChatThemeSettings = ({
         />
       </Stack>
       <Stack borderWidth={1} rounded="md" p="4" spacing={4}>
-        <Heading fontSize="lg">{t('theme.sideMenu.chat.buttons')}</Heading>
+        <Heading fontSize="lg">{t('theme.sideMenu.chat.buttonsUnclickable')}</Heading>
         <ContainerThemeForm
           testId="buttonsTheme"
           theme={chatTheme?.buttons}
           onThemeChange={updateButtons}
+          defaultTheme={{
+            backgroundColor: defaultButtonsBackgroundColor,
+            color: defaultButtonsColor,
+            opacity: defaultOpacity,
+            blur: defaultBlur,
+            border: {
+              roundeness: defaultRoundness,
+              thickness: defaultButtonsBorderThickness,
+              color:
+                chatTheme?.buttons?.backgroundColor ??
+                defaultButtonsBackgroundColor,
+            },
+          }}
+        />
+      </Stack>
+      <Stack borderWidth={1} rounded="md" p="4" spacing={4}>
+        <Heading fontSize="lg">{t('theme.sideMenu.chat.buttons')}</Heading>
+        <ContainerThemeForm
+          testId="buttonsUnclickableTheme"
+          theme={chatTheme?.buttonsUnclickable}
+          onThemeChange={updateButtonsUnclickable}
           defaultTheme={{
             backgroundColor: defaultButtonsBackgroundColor,
             color: defaultButtonsColor,

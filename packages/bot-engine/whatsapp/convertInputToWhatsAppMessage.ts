@@ -92,6 +92,69 @@ export const convertInputToWhatsAppMessages = (
         }
       })
     }
+    case InputBlockType.PICTURE_BUTTON: {
+      if (
+        input.options?.isMultipleChoice ??
+        defaultPictureChoiceOptions.isMultipleChoice
+      )
+        return input.items.flatMap((item, idx) => {
+          let bodyText = ''
+          if (item.title) bodyText += `*${item.title}*`
+          if (item.description) {
+            if (item.title) bodyText += '\n\n'
+            bodyText += item.description
+          }
+          const imageMessage = item.pictureSrc
+            ? ({
+              type: 'image',
+              image: {
+                link: item.pictureSrc ?? '',
+              },
+            } as const)
+            : undefined
+          const textMessage = {
+            type: 'text',
+            text: {
+              body: `${idx + 1}. ${bodyText}`,
+            },
+          } as const
+          return imageMessage ? [imageMessage, textMessage] : textMessage
+        })
+      return input.items.map((item) => {
+        let bodyText = ''
+        if (item.title) bodyText += `*${item.title}*`
+        if (item.description) {
+          if (item.title) bodyText += '\n\n'
+          bodyText += item.description
+        }
+        return {
+          type: 'interactive',
+          interactive: {
+            type: 'button',
+            header: item.pictureSrc
+              ? {
+                type: 'image',
+                image: {
+                  link: item.pictureSrc,
+                },
+              }
+              : undefined,
+            body: isEmpty(bodyText) ? undefined : { text: bodyText },
+            action: {
+              buttons: [
+                {
+                  type: 'reply',
+                  reply: {
+                    id: item.id,
+                    title: 'Select',
+                  },
+                },
+              ],
+            },
+          },
+        }
+      })
+    }
     case InputBlockType.CHOICE: {
       if (
         input.options?.isMultipleChoice ??

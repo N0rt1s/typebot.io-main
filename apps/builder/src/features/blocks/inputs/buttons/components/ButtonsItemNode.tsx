@@ -35,9 +35,9 @@ export const ButtonsItemNode = ({ item, indices, isMouseOver }: Props) => {
   const { openedItemId, setOpenedItemId } = useGraph()
   const [itemValue, setItemValue] = useState(
     item.content ??
-      (indices.itemIndex === 0
-        ? t('blocks.inputs.button.clickToEdit.label')
-        : '')
+    (indices.itemIndex === 0
+      ? t('blocks.inputs.button.clickToEdit.label')
+      : '')
   )
   const editableRef = useRef<HTMLDivElement | null>(null)
   const ref = useRef<HTMLDivElement | null>(null)
@@ -47,10 +47,12 @@ export const ButtonsItemNode = ({ item, indices, isMouseOver }: Props) => {
 
   const handleInputSubmit = () => {
     if (itemValue === '') deleteItem(indices)
-    else
+    else {
+      console.log(itemValue)
       updateItem(indices, {
         content: itemValue === '' ? undefined : itemValue,
       } as Item)
+    }
   }
 
   const handleKeyPress = async (e: React.KeyboardEvent<HTMLDivElement>) => {

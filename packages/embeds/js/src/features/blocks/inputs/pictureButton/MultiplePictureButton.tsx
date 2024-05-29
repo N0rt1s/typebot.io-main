@@ -1,5 +1,4 @@
 import { InputSubmitContent } from '@/types'
-import { PictureChoiceBlock } from '@typebot.io/schemas/features/blocks/inputs/pictureChoice'
 import { For, Show, createEffect, createSignal, onMount } from 'solid-js'
 import { Checkbox } from '../buttons/components/Checkbox'
 import { SendButton } from '@/components'
@@ -7,15 +6,17 @@ import { isDefined, isEmpty, isNotEmpty, isSvgSrc } from '@typebot.io/lib'
 import { SearchInput } from '@/components/inputs/SearchInput'
 import { isMobile } from '@/utils/isMobileSignal'
 import { defaultPictureChoiceOptions } from '@typebot.io/schemas/features/blocks/inputs/pictureChoice/constants'
+import { PictureButtonBlock } from '@typebot.io/schemas'
 
 type Props = {
-  defaultItems: PictureChoiceBlock['items']
-  options: PictureChoiceBlock['options']
+  defaultItems: PictureButtonBlock['items']
+  block: PictureButtonBlock
+  options: PictureButtonBlock['options']
   onSubmit: (value: InputSubmitContent) => void
   onTransitionEnd: () => void
 }
 
-export const MultiplePictureChoice = (props: Props) => {
+export const MultiplePictureButton = (props: Props) => {
   let inputRef: HTMLInputElement | undefined
   const [filteredItems, setFilteredItems] = createSignal(props.defaultItems)
   const [selectedItemIds, setSelectedItemIds] = createSignal<string[]>([])
@@ -93,6 +94,10 @@ export const MultiplePictureChoice = (props: Props) => {
           />
         </div>
       </Show>
+      <div class="flex items-end typebot-input w-full">
+        <div >{props.block.question}</div>
+
+      </div>
       <div
         class={
           'flex flex-wrap justify-end gap-2' +
@@ -101,66 +106,68 @@ export const MultiplePictureChoice = (props: Props) => {
             : '')
         }
       >
-        <For each={filteredItems()}>
-          {(item, index) => (
-            <div
-              role="checkbox"
-              aria-checked={selectedItemIds().some(
-                (selectedItemId) => selectedItemId === item.id
-              )}
-              on:click={() => handleClick(item.id)}
-              class={
-                'flex flex-col focus:outline-none cursor-pointer select-none typebot-selectable-picture' +
-                (selectedItemIds().some(
-                  (selectedItemId) => selectedItemId === item.id
-                )
-                  ? ' selected'
-                  : '') +
-                (isSvgSrc(item.pictureSrc) ? ' has-svg' : '')
-              }
-              data-itemid={item.id}
-            >
-              <img
-                src={item.pictureSrc}
-                alt={item.title ?? `Picture ${index() + 1}`}
-                elementtiming={`Picture choice ${index() + 1}`}
-                fetchpriority={'high'}
-                class="m-auto"
-                onLoad={onImageLoad}
-              />
+        <div class={`grid grid-cols-${2} gap-4`}>
+          <For each={filteredItems()}>
+            {(item, index) => (
               <div
+                role="checkbox"
+                aria-checked={selectedItemIds().some(
+                  (selectedItemId) => selectedItemId === item.id
+                )}
+                on:click={() => handleClick(item.id)}
                 class={
-                  'flex gap-3 py-2 flex-shrink-0' +
-                  (isEmpty(item.title) && isEmpty(item.description)
-                    ? ' justify-center'
-                    : ' px-3')
-                }
-              >
-                <Checkbox
-                  isChecked={selectedItemIds().some(
+                  'flex flex-col focus:outline-none cursor-pointer select-none typebot-selectable-picture' +
+                  (selectedItemIds().some(
                     (selectedItemId) => selectedItemId === item.id
-                  )}
-                  class={
-                    'flex-shrink-0' +
-                    (item.title || item.description ? ' mt-1' : undefined)
-                  }
+                  )
+                    ? ' selected'
+                    : '') +
+                  (isSvgSrc(item.pictureSrc) ? ' has-svg-1' : '')
+                }
+                data-itemid={item.id}
+              >
+                <img
+                  src={item.pictureSrc}
+                  alt={item.title ?? `Picture ${index() + 1}`}
+                  elementtiming={`Picture choice ${index() + 1}`}
+                  fetchpriority={'high'}
+                  class="m-auto"
+                  onLoad={onImageLoad}
                 />
-                <Show when={item.title || item.description}>
-                  <div class="flex flex-col gap-1 ">
-                    <Show when={item.title}>
-                      <span class="font-semibold">{item.title}</span>
-                    </Show>
-                    <Show when={item.description}>
-                      <span class="text-sm whitespace-pre-wrap text-left">
-                        {item.description}
-                      </span>
-                    </Show>
-                  </div>
-                </Show>
+                <div
+                  class={
+                    'flex gap-3 py-2 flex-shrink-0' +
+                    (isEmpty(item.title) && isEmpty(item.description)
+                      ? ' justify-center'
+                      : ' px-3')
+                  }
+                >
+                  <Checkbox
+                    isChecked={selectedItemIds().some(
+                      (selectedItemId) => selectedItemId === item.id
+                    )}
+                    class={
+                      'flex-shrink-0' +
+                      (item.title || item.description ? ' mt-1' : undefined)
+                    }
+                  />
+                  <Show when={item.title || item.description}>
+                    <div class="flex flex-col gap-1 ">
+                      <Show when={item.title}>
+                        <span class="font-semibold">{item.title}</span>
+                      </Show>
+                      <Show when={item.description}>
+                        <span class="text-sm whitespace-pre-wrap text-left">
+                          {item.description}
+                        </span>
+                      </Show>
+                    </div>
+                  </Show>
+                </div>
               </div>
-            </div>
-          )}
-        </For>
+            )}
+          </For>
+        </div>
         <For
           each={selectedItemIds()
             .filter((selectedItemId) =>
@@ -227,12 +234,14 @@ export const MultiplePictureChoice = (props: Props) => {
           )}
         </For>
       </div>
-      {selectedItemIds().length > 0 && (
-        <SendButton disableIcon>
-          {props.options?.buttonLabel ??
-            defaultPictureChoiceOptions.buttonLabel}
-        </SendButton>
-      )}
-    </form>
+      {
+        selectedItemIds().length > 0 && (
+          <SendButton disableIcon>
+            {props.options?.buttonLabel ??
+              defaultPictureChoiceOptions.buttonLabel}
+          </SendButton>
+        )
+      }
+    </form >
   )
 }

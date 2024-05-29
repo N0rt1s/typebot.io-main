@@ -46,6 +46,7 @@ import { LogicBlockType } from '@typebot.io/schemas/features/blocks/logic/consta
 import { ForgedBlockSettings } from '../../../../forge/components/ForgedBlockSettings'
 import { OpenAISettings } from '@/features/blocks/integrations/openai/components/OpenAISettings'
 import { ButtonsUnclickableBlockSettings } from '@/features/blocks/inputs/buttonsUnclickable/components/ButtonsUnclickableBlockSettings'
+import { PictureButtonSettings } from '@/features/blocks/inputs/pictureButton/components/PictureButtonSettings'
 
 type Props = {
   block: BlockWithOptions
@@ -183,6 +184,14 @@ export const BlockSettings = ({
     case InputBlockType.PICTURE_CHOICE: {
       return (
         <PictureChoiceSettings
+          options={block.options}
+          onOptionsChange={updateOptions}
+        />
+      )
+    }
+    case InputBlockType.PICTURE_BUTTON: {
+      return (
+        <PictureButtonSettings
           options={block.options}
           onOptionsChange={updateOptions}
         />

@@ -72,7 +72,8 @@ export const edgesAction = (setTypebot: SetTypebot): EdgesActions => ({
               areAllItemsConnected &&
               (block.type === InputBlockType.CHOICE ||
                 block.type === InputBlockType.CHOICE_UNCLICKABLE ||
-                block.type === InputBlockType.PICTURE_CHOICE)
+                block.type === InputBlockType.PICTURE_CHOICE ||
+                block.type === InputBlockType.PICTURE_BUTTON)
             ) {
               deleteEdgeDraft({
                 typebot,

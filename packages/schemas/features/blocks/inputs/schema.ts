@@ -11,6 +11,7 @@ import { textInputSchema } from './text'
 import { urlInputSchema } from './url'
 import { fileInputBlockSchemas } from './file'
 import { buttonsUnclickableInputSchemas } from './choiceUnclickable'
+import { pictureButtonBlockSchemas } from './pictureButton'
 
 export const inputBlockSchemas = {
   v5: [
@@ -26,6 +27,7 @@ export const inputBlockSchemas = {
     ratingInputBlockSchema,
     fileInputBlockSchemas.v5,
     pictureChoiceBlockSchemas.v5,
+    pictureButtonBlockSchemas.v5,
   ],
   v6: [
     textInputSchema,
@@ -40,6 +42,7 @@ export const inputBlockSchemas = {
     ratingInputBlockSchema,
     fileInputBlockSchemas.v6,
     pictureChoiceBlockSchemas.v6,
+    pictureButtonBlockSchemas.v6,
   ],
 } as const
 

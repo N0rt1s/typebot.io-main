@@ -15,6 +15,7 @@ import {
   HttpRequestBlock,
   BlockWithOptionsType,
   ChoiceUnclickableInputBlock,
+  PictureButtonBlock,
 } from './features/blocks'
 import { BubbleBlockType } from './features/blocks/bubbles/constants'
 import { defaultChoiceInputOptions } from './features/blocks/inputs/choice/constants'
@@ -52,6 +53,10 @@ export const isChoiceUnclickableInput = (block: Block): block is ChoiceUnclickab
 export const isPictureChoiceInput = (
   block: Block
 ): block is PictureChoiceBlock => block.type === InputBlockType.PICTURE_CHOICE
+
+export const isPictureButtonInput = (
+  block: Block
+): block is PictureButtonBlock => block.type === InputBlockType.PICTURE_BUTTON
 
 export const isSingleChoiceInput = (block: Block): block is ChoiceInputBlock =>
   block.type === InputBlockType.CHOICE &&
@@ -109,7 +114,8 @@ export const blockTypeHasItems = (
   type === InputBlockType.CHOICE ||
   type === InputBlockType.CHOICE_UNCLICKABLE ||
   type === LogicBlockType.AB_TEST ||
-  type === InputBlockType.PICTURE_CHOICE
+  type === InputBlockType.PICTURE_CHOICE ||
+  type === InputBlockType.PICTURE_BUTTON
 
 export const blockHasItems = (
   block: Block

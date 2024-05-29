@@ -351,6 +351,9 @@
                                             "$ref": "#/components/schemas/pictureChoiceV5"
                                           },
                                           {
+                                            "$ref": "#/components/schemas/pictureButtonV5"
+                                          },
+                                          {
                                             "type": "object",
                                             "properties": {
                                               "id": {
@@ -4676,6 +4679,9 @@
                                         "$ref": "#/components/schemas/pictureChoiceV5"
                                       },
                                       {
+                                        "$ref": "#/components/schemas/pictureButtonV5"
+                                      },
+                                      {
                                         "type": "object",
                                         "properties": {
                                           "id": {
@@ -8136,6 +8142,9 @@
                                       },
                                       {
                                         "$ref": "#/components/schemas/pictureChoiceV5"
+                                      },
+                                      {
+                                        "$ref": "#/components/schemas/pictureButtonV5"
                                       },
                                       {
                                         "type": "object",
@@ -16489,6 +16498,158 @@
         ],
         "title": "Picture choice v5"
       },
+      "pictureButtonV5": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "outgoingEdgeId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "picture button input"
+            ]
+          },
+          "question": {
+            "type": "string"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "blockId": {
+                  "type": "string"
+                },
+                "outgoingEdgeId": {
+                  "type": "string"
+                },
+                "pictureSrc": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "displayCondition": {
+                  "type": "object",
+                  "properties": {
+                    "isEnabled": {
+                      "type": "boolean"
+                    },
+                    "condition": {
+                      "type": "object",
+                      "properties": {
+                        "logicalOperator": {
+                          "type": "string",
+                          "enum": [
+                            "OR",
+                            "AND"
+                          ]
+                        },
+                        "comparisons": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "variableId": {
+                                "type": "string"
+                              },
+                              "comparisonOperator": {
+                                "type": "string",
+                                "enum": [
+                                  "Equal to",
+                                  "Not equal",
+                                  "Contains",
+                                  "Does not contain",
+                                  "Greater than",
+                                  "Less than",
+                                  "Is set",
+                                  "Is empty",
+                                  "Starts with",
+                                  "Ends with",
+                                  "Matches regex",
+                                  "Does not match regex"
+                                ]
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "variableId": {
+                "type": "string"
+              },
+              "isMultipleChoice": {
+                "type": "boolean"
+              },
+              "isSearchable": {
+                "type": "boolean"
+              },
+              "buttonLabel": {
+                "type": "string"
+              },
+              "searchInputPlaceholder": {
+                "type": "string"
+              },
+              "picturesInRow": {
+                "type": "number"
+              },
+              "dynamicItems": {
+                "type": "object",
+                "properties": {
+                  "isEnabled": {
+                    "type": "boolean"
+                  },
+                  "titlesVariableId": {
+                    "type": "string"
+                  },
+                  "descriptionsVariableId": {
+                    "type": "string"
+                  },
+                  "pictureSrcsVariableId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "items"
+        ],
+        "title": "Picture button v5"
+      },
       "groupV6": {
         "type": "object",
         "properties": {
@@ -16763,6 +16924,9 @@
           },
           {
             "$ref": "#/components/schemas/pictureChoice"
+          },
+          {
+            "$ref": "#/components/schemas/pictureButton"
           },
           {
             "type": "object",
@@ -21009,6 +21173,155 @@
         ],
         "title": "Picture choice"
       },
+      "pictureButton": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "outgoingEdgeId": {
+            "type": "string"
+          },
+          "question": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "picture button input"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "outgoingEdgeId": {
+                  "type": "string"
+                },
+                "pictureSrc": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "displayCondition": {
+                  "type": "object",
+                  "properties": {
+                    "isEnabled": {
+                      "type": "boolean"
+                    },
+                    "condition": {
+                      "type": "object",
+                      "properties": {
+                        "logicalOperator": {
+                          "type": "string",
+                          "enum": [
+                            "OR",
+                            "AND"
+                          ]
+                        },
+                        "comparisons": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "variableId": {
+                                "type": "string"
+                              },
+                              "comparisonOperator": {
+                                "type": "string",
+                                "enum": [
+                                  "Equal to",
+                                  "Not equal",
+                                  "Contains",
+                                  "Does not contain",
+                                  "Greater than",
+                                  "Less than",
+                                  "Is set",
+                                  "Is empty",
+                                  "Starts with",
+                                  "Ends with",
+                                  "Matches regex",
+                                  "Does not match regex"
+                                ]
+                              },
+                              "value": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "id"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "options": {
+            "type": "object",
+            "properties": {
+              "variableId": {
+                "type": "string"
+              },
+              "isMultipleChoice": {
+                "type": "boolean"
+              },
+              "isSearchable": {
+                "type": "boolean"
+              },
+              "buttonLabel": {
+                "type": "string"
+              },
+              "searchInputPlaceholder": {
+                "type": "string"
+              },
+              "picturesInRow": {
+                "type": "number"
+              },
+              "dynamicItems": {
+                "type": "object",
+                "properties": {
+                  "isEnabled": {
+                    "type": "boolean"
+                  },
+                  "titlesVariableId": {
+                    "type": "string"
+                  },
+                  "descriptionsVariableId": {
+                    "type": "string"
+                  },
+                  "pictureSrcsVariableId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "items"
+        ],
+        "title": "Picture button"
+      },
       "error.BAD_REQUEST": {
         "type": "object",
         "properties": {
@@ -22418,6 +22731,9 @@
                       },
                       {
                         "$ref": "#/components/schemas/pictureChoiceV5"
+                      },
+                      {
+                        "$ref": "#/components/schemas/pictureButtonV5"
                       },
                       {
                         "type": "object",
@@ -25249,6 +25565,9 @@
                       },
                       {
                         "$ref": "#/components/schemas/pictureChoiceV5"
+                      },
+                      {
+                        "$ref": "#/components/schemas/pictureButtonV5"
                       },
                       {
                         "type": "object",

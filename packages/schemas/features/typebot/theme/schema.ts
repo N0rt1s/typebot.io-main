@@ -51,6 +51,7 @@ export const chatThemeSchema = z.object({
   hostBubbles: containerThemeSchema.optional(),
   guestBubbles: containerThemeSchema.optional(),
   buttons: containerThemeSchema.optional(),
+  buttonsUnclickable: containerThemeSchema.optional(),
   inputs: inputThemeSchema.optional(),
   roundness: z
     .enum(['none', 'medium', 'large'])

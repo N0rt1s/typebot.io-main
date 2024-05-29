@@ -9,6 +9,7 @@ import {
   paymentInputRuntimeOptionsSchema,
   paymentInputSchema,
   phoneNumberInputBlockSchema,
+  pictureButtonBlockSchemas,
   pictureChoiceBlockSchemas,
   ratingInputBlockSchema,
   textInputSchema,
@@ -313,11 +314,13 @@ const chatResponseBaseSchema = z.object({
         ratingInputBlockSchema,
         fileInputBlockSchemas.v6,
         pictureChoiceBlockSchemas.v6,
+        pictureButtonBlockSchemas.v6,
       ]),
       z.discriminatedUnion('type', [
         buttonsInputSchemas.v5,
         fileInputBlockSchemas.v5,
         pictureChoiceBlockSchemas.v5,
+        pictureButtonBlockSchemas.v5,
       ]),
     ])
     .and(

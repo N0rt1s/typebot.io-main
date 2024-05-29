@@ -14,6 +14,7 @@ import type {
   PaymentInputBlock,
   DateInputBlock,
   ChoiceUnclickableInputBlock,
+  PictureButtonBlock,
 } from '@typebot.io/schemas'
 import { GuestBubble } from './bubbles/GuestBubble'
 import { BotContext, InputSubmitContent } from '@/types'
@@ -39,6 +40,8 @@ import { defaultPaymentInputOptions } from '@typebot.io/schemas/features/blocks/
 import { persist } from '@/utils/persist'
 import { defaultGuestAvatarIsEnabled } from '@typebot.io/schemas/features/typebot/theme/constants'
 import { ButtonsUnclickable } from '@/features/blocks/inputs/buttonsUnclickable/components/ButtonsUnclickable'
+import { SinglePictureButton } from '@/features/blocks/inputs/pictureButton/SinglePictureButton'
+import { MultiplePictureButton } from '@/features/blocks/inputs/pictureButton/MultiplePictureButton'
 
 type Props = {
   ref: HTMLDivElement | undefined
@@ -254,6 +257,30 @@ const Input = (props: {
           </Switch>
         )}
       </Match>
+      <Match when={isPictureButtonBlock(props.block)} keyed>
+        {(block) => (
+          <Switch>
+            <Match when={!block.options?.isMultipleChoice}>
+              <SinglePictureButton
+                defaultItems={block.items}
+                block={block}
+                options={block.options}
+                onSubmit={onSubmit}
+                onTransitionEnd={props.onTransitionEnd}
+              />
+            </Match>
+            <Match when={block.options?.isMultipleChoice}>
+              <MultiplePictureButton
+                defaultItems={block.items}
+                block={block}
+                options={block.options}
+                onSubmit={onSubmit}
+                onTransitionEnd={props.onTransitionEnd}
+              />
+            </Match>
+          </Switch>
+        )}
+      </Match>
       <Match when={props.block.type === InputBlockType.RATING}>
         <RatingForm
           block={props.block as RatingInputBlock}
@@ -300,3 +327,8 @@ const isPictureChoiceBlock = (
   block: ContinueChatResponse['input']
 ): PictureChoiceBlock | undefined =>
   block?.type === InputBlockType.PICTURE_CHOICE ? block : undefined
+
+const isPictureButtonBlock = (
+  block: ContinueChatResponse['input']
+): PictureButtonBlock | undefined =>
+  block?.type === InputBlockType.PICTURE_BUTTON ? block : undefined

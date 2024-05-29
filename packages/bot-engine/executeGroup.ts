@@ -33,6 +33,7 @@ import {
   parseBubbleBlock,
 } from './parseBubbleBlock'
 import { injectVariableValuesInButtonsUnclickableInputBlock } from './blocks/inputs/buttonsUnclickable/injectVariableValuesInButtonsUnclickableInputBlock'
+import { injectVariableValuesInPictureButtonBlock } from './blocks/inputs/pictureButton/injectVariableValuesInPictureChoiceBlock'
 
 type ContextProps = {
   version: 1 | 2
@@ -276,6 +277,11 @@ export const parseInput =
         }
         case InputBlockType.PICTURE_CHOICE: {
           return injectVariableValuesInPictureChoiceBlock(
+            state.typebotsQueue[0].typebot.variables
+          )(block)
+        }
+        case InputBlockType.PICTURE_BUTTON: {
+          return injectVariableValuesInPictureButtonBlock(
             state.typebotsQueue[0].typebot.variables
           )(block)
         }

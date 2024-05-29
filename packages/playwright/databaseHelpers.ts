@@ -36,13 +36,13 @@ export const parseTestTypebot = (partialTypebot: Partial<Typebot>): Typebot => {
     events:
       version === '6'
         ? [
-            {
-              id: 'group1',
-              type: EventType.START,
-              graphCoordinates: { x: 0, y: 0 },
-              outgoingEdgeId: 'edge1',
-            },
-          ]
+          {
+            id: 'group1',
+            type: EventType.START,
+            graphCoordinates: { x: 0, y: 0 },
+            outgoingEdgeId: 'edge1',
+          },
+        ]
         : null,
     variables: [{ id: 'var1', name: 'var1' }],
     ...partialTypebot,
@@ -56,21 +56,21 @@ export const parseTestTypebot = (partialTypebot: Partial<Typebot>): Typebot => {
     groups: (version === '6'
       ? partialTypebot.groups ?? []
       : [
-          {
-            id: 'group0',
-            title: 'Group #0',
-            blocks: [
-              {
-                id: 'block0',
-                type: 'start',
-                label: 'Start',
-                outgoingEdgeId: 'edge1',
-              },
-            ],
-            graphCoordinates: { x: 0, y: 0 },
-          },
-          ...(partialTypebot.groups ?? []),
-        ]) as any[],
+        {
+          id: 'group0',
+          title: 'Group #0',
+          blocks: [
+            {
+              id: 'block0',
+              type: 'start',
+              label: 'Start',
+              outgoingEdgeId: 'edge1',
+            },
+          ],
+          graphCoordinates: { x: 0, y: 0 },
+        },
+        ...(partialTypebot.groups ?? []),
+      ]) as any[],
   }
 }
 
@@ -104,18 +104,18 @@ export const parseDefaultGroupWithBlock = (
       blocks: [
         options?.withGoButton
           ? {
-              id: 'block1',
-              groupId: 'group1',
-              type: InputBlockType.CHOICE,
-              items: [
-                {
-                  id: 'item1',
-                  blockId: 'block1',
-                  content: 'Go',
-                },
-              ],
-              options: {},
-            }
+            id: 'block1',
+            groupId: 'group1',
+            type: InputBlockType.CHOICE,
+            items: [
+              {
+                id: 'item1',
+                blockId: 'block1',
+                content: 'Go',
+              },
+            ],
+            options: {},
+          }
           : undefined,
         {
           id: 'block2',

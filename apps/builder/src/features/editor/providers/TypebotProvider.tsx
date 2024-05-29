@@ -75,13 +75,13 @@ const typebotContext = createContext<
     }) => Promise<TypebotV6 | undefined>
     restorePublishedTypebot: () => void
   } & GroupsActions &
-    BlocksActions &
-    ItemsActions &
-    VariablesActions &
-    EdgesActions &
-    EventsActions
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //@ts-ignore
+  BlocksActions &
+  ItemsActions &
+  VariablesActions &
+  EdgesActions &
+  EventsActions
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-ignore
 >({})
 
 export const TypebotProvider = ({
@@ -202,7 +202,7 @@ export const TypebotProvider = ({
     if (
       typebot.id !== localTypebot?.id ||
       new Date(typebot.updatedAt).getTime() >
-        new Date(localTypebot.updatedAt).getTime()
+      new Date(localTypebot.updatedAt).getTime()
     ) {
       setLocalTypebot({ ...typebot })
       setGroupsCoordinates(typebot.groups)
@@ -227,6 +227,7 @@ export const TypebotProvider = ({
       }
       if (dequal(omit(typebot, 'updatedAt'), omit(typebotToSave, 'updatedAt')))
         return
+      console.log(updates)
       const newParsedTypebot = typebotV6Schema.parse({ ...typebotToSave })
       setLocalTypebot(newParsedTypebot)
       try {

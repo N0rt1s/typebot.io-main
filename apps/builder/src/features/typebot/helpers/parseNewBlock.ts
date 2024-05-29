@@ -12,6 +12,8 @@ const parseDefaultItems = (type: BlockWithItems['type']): ItemV6[] => {
       return [{ id: createId() }]
     case InputBlockType.PICTURE_CHOICE:
       return [{ id: createId() }]
+    case InputBlockType.PICTURE_BUTTON:
+      return [{ id: createId() }]
     case LogicBlockType.CONDITION:
       return [
         {

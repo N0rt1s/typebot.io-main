@@ -46,6 +46,7 @@ import { uploadFileToBucket } from '@typebot.io/lib/s3/uploadFileToBucket'
 import { isURL } from '@typebot.io/lib/validators/isURL'
 import { isForgedBlockType } from '@typebot.io/schemas/features/blocks/forged/helpers'
 import { parseButtonsUnclickableReply } from './blocks/inputs/buttonsUnclickable/parseButtonsUnclickableReply'
+import { parsePictureButtonReply } from './blocks/inputs/pictureButton/parsePictureButtonReply'
 
 type Params = {
   version: 1 | 2
@@ -458,6 +459,22 @@ const getOutgoingEdgeId =
         if (matchedItem?.outgoingEdgeId)
           return { edgeId: matchedItem.outgoingEdgeId, isOffDefaultPath: true }
       }
+      if (
+        block.type === InputBlockType.PICTURE_BUTTON &&
+        !(
+          block.options?.isMultipleChoice ??
+          defaultPictureChoiceOptions.isMultipleChoice
+        ) &&
+        reply
+      ) {
+        const matchedItem = block.items.find(
+          (item) =>
+            parseVariables(variables)(item.title).normalize() ===
+            reply.normalize()
+        )
+        if (matchedItem?.outgoingEdgeId)
+          return { edgeId: matchedItem.outgoingEdgeId, isOffDefaultPath: true }
+      }
       return { edgeId: block.outgoingEdgeId, isOffDefaultPath: false }
     }
 
@@ -558,6 +575,10 @@ const parseReply =
         case InputBlockType.PICTURE_CHOICE: {
           if (!reply) return { status: 'fail' }
           return parsePictureChoicesReply(state)(reply, block)
+        }
+        case InputBlockType.PICTURE_BUTTON: {
+          if (!reply) return { status: 'fail' }
+          return parsePictureButtonReply(state)(reply, block)
         }
         case InputBlockType.TEXT: {
           if (!reply) return { status: 'fail' }

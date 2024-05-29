@@ -5,6 +5,7 @@ import {
   ConditionItem,
   ButtonItem,
   PictureChoiceItem,
+  PictureButtonItem,
 } from '@typebot.io/schemas'
 import { SetTypebot } from '../TypebotProvider'
 import { Draft, produce } from 'immer'
@@ -64,6 +65,18 @@ const createItem = (
       block.items.splice(itemIndex, 0, newItem)
       return newItem
     }
+    case InputBlockType.PICTURE_BUTTON: {
+      const baseItem = item as PictureButtonItem
+      const newItem = {
+        ...baseItem,
+        id: 'id' in baseItem && item.id ? item.id : createId(),
+      }
+      block.items.splice(itemIndex, 0, newItem)
+      return newItem
+    }
+    default: {
+      throw new Error(`Unsupported block type: ${block.type}`)
+    }
   }
 }
 
@@ -102,6 +115,18 @@ const duplicateItem = (
       block.items.splice(itemIndex + 1, 0, newItem)
       return newItem
     }
+    case InputBlockType.PICTURE_BUTTON: {
+      const baseItem = item as PictureButtonItem
+      const newItem = {
+        ...baseItem,
+        id: createId(),
+      }
+      block.items.splice(itemIndex + 1, 0, newItem)
+      return newItem
+    }
+    default: {
+      throw new Error(`Unsupported block type: ${block.type}`)
+    }
   }
 }
 
@@ -124,9 +149,9 @@ const itemsAction = (setTypebot: SetTypebot): ItemsActions => ({
           const edgeIndex = typebot.edges.findIndex(byId(item.outgoingEdgeId))
           edgeIndex !== -1
             ? (typebot.edges[edgeIndex].from = {
-                blockId: block.id,
-                itemId: newItem.id,
-              })
+              blockId: block.id,
+              itemId: newItem.id,
+            })
             : (newItem.outgoingEdgeId = undefined)
         }
       })
@@ -148,12 +173,12 @@ const itemsAction = (setTypebot: SetTypebot): ItemsActions => ({
       produce(typebot, (typebot) => {
         const block = typebot.groups[groupIndex].blocks[blockIndex]
         if (!blockHasItems(block)) return
-        ;(
-          typebot.groups[groupIndex].blocks[blockIndex] as BlockWithItems
-        ).items[itemIndex] = {
-          ...block.items[itemIndex],
-          ...updates,
-        } as Item
+          ; (
+            typebot.groups[groupIndex].blocks[blockIndex] as BlockWithItems
+          ).items[itemIndex] = {
+            ...block.items[itemIndex],
+            ...updates,
+          } as Item
       })
     ),
   detachItemFromBlock: ({ groupIndex, blockIndex, itemIndex }: ItemIndices) =>

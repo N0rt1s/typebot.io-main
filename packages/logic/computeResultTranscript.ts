@@ -415,5 +415,21 @@ const getOutgoingEdgeId = ({
     if (matchedItem?.outgoingEdgeId)
       return { edgeId: matchedItem.outgoingEdgeId, isOffDefaultPath: true }
   }
+  if (
+    block.type === InputBlockType.PICTURE_BUTTON &&
+    !(
+      block.options?.isMultipleChoice ??
+      defaultPictureChoiceOptions.isMultipleChoice
+    ) &&
+    answer
+  ) {
+    const matchedItem = block.items.find(
+      (item) =>
+        parseVariables(variables)(item.title).normalize() === answer.normalize()
+    )
+    if (matchedItem?.outgoingEdgeId)
+      return { edgeId: matchedItem.outgoingEdgeId, isOffDefaultPath: true }
+  }
+
   return { edgeId: block.outgoingEdgeId, isOffDefaultPath: false }
 }

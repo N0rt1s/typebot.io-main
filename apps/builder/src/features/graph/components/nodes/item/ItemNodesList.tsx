@@ -49,7 +49,8 @@ export const ItemNodesList = ({
   const someChoiceItemsAreNotConnected =
     block.type === InputBlockType.CHOICE ||
       block.type === InputBlockType.CHOICE_UNCLICKABLE ||
-      block.type === InputBlockType.PICTURE_CHOICE
+      block.type === InputBlockType.PICTURE_CHOICE ||
+      block.type === InputBlockType.PICTURE_BUTTON
       ? block.items.some((item) => item.outgoingEdgeId === undefined)
       : true
 

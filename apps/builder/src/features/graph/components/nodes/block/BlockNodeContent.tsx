@@ -40,6 +40,7 @@ import { IntegrationBlockType } from '@typebot.io/schemas/features/blocks/integr
 import { ForgedBlockNodeContent } from '@/features/forge/components/ForgedBlockNodeContent'
 import { OpenAINodeBody } from '@/features/blocks/integrations/openai/components/OpenAINodeBody'
 import { ButtonsUnclickableBlockNode } from '@/features/blocks/inputs/buttonsUnclickable/components/ButtonsUnclickableBlockNode'
+import { PictureButtonNode } from '@/features/blocks/inputs/pictureButton/components/PictureButtonNode'
 
 type Props = {
   block: BlockV6
@@ -87,6 +88,9 @@ export const BlockNodeContent = ({
     }
     case InputBlockType.PICTURE_CHOICE: {
       return <PictureChoiceNode block={block} indices={indices} />
+    }
+    case InputBlockType.PICTURE_BUTTON: {
+      return <PictureButtonNode block={block} indices={indices} />
     }
     case InputBlockType.PHONE: {
       return <PhoneNodeContent options={block.options} />

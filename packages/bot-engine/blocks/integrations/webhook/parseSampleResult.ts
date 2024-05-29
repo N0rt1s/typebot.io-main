@@ -151,6 +151,10 @@ const getSampleValue = (block: InputBlock, userEmail?: string): string => {
       return block.options?.isMultipleChoice
         ? block.items.map((item) => item.title ?? item.pictureSrc).join(', ')
         : block.items[0]?.title ?? block.items[0]?.pictureSrc ?? 'Item'
+    case InputBlockType.PICTURE_BUTTON:
+      return block.options?.isMultipleChoice
+        ? block.items.map((item) => item.title ?? item.pictureSrc).join(', ')
+        : block.items[0]?.title ?? block.items[0]?.pictureSrc ?? 'Item'
   }
 }
 

@@ -9,6 +9,7 @@ export enum InputBlockType {
   PHONE = 'phone number input',
   CHOICE = 'choice input',
   CHOICE_UNCLICKABLE = 'choice input (Unclickable)',
+  PICTURE_BUTTON = 'picture button input',
   PICTURE_CHOICE = 'picture choice input',
   PAYMENT = 'payment input',
   RATING = 'rating input',
