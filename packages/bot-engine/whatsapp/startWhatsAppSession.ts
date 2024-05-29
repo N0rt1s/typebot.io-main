@@ -34,10 +34,10 @@ export const startWhatsAppSession = async ({
   contact,
 }: Props): Promise<
   | (ContinueChatResponse & {
-      newSessionState: SessionState
-      visitedEdges: VisitedEdge[]
-      setVariableHistory: SetVariableHistoryItem[]
-    })
+    newSessionState: SessionState
+    visitedEdges: VisitedEdge[]
+    setVariableHistory: SetVariableHistoryItem[]
+  })
   | { error: string }
 > => {
   const publicTypebotsWithWhatsAppEnabled =
@@ -114,19 +114,19 @@ export const messageMatchStartCondition = (
   if (typeof message !== 'string') return false
   return startCondition.logicalOperator === LogicalOperator.AND
     ? startCondition.comparisons.every((comparison) =>
-        matchComparison(
-          message,
-          comparison.comparisonOperator,
-          comparison.value
-        )
+      matchComparison(
+        message,
+        comparison.comparisonOperator,
+        comparison.value
       )
+    )
     : startCondition.comparisons.some((comparison) =>
-        matchComparison(
-          message,
-          comparison.comparisonOperator,
-          comparison.value
-        )
+      matchComparison(
+        message,
+        comparison.comparisonOperator,
+        comparison.value
       )
+    )
 }
 
 const matchComparison = (

@@ -77,8 +77,8 @@ export const executeFunction = async ({
       typeof e === 'string'
         ? e
         : e instanceof Error
-        ? e.message
-        : JSON.stringify(e)
+          ? e.message
+          : JSON.stringify(e)
 
     return {
       error,

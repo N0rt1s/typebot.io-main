@@ -94,7 +94,7 @@ export const ChatChunk = (props: Props) => {
             style={{
               'max-width':
                 props.theme.chat?.guestAvatar?.isEnabled ??
-                defaultGuestAvatarIsEnabled
+                  defaultGuestAvatarIsEnabled
                   ? isMobile()
                     ? 'calc(100% - 60px)'
                     : 'calc(100% - 48px - 48px)'
@@ -164,7 +164,7 @@ export const ChatChunk = (props: Props) => {
               style={{
                 'max-width':
                   props.theme.chat?.guestAvatar?.isEnabled ??
-                  defaultGuestAvatarIsEnabled
+                    defaultGuestAvatarIsEnabled
                     ? isMobile()
                       ? 'calc(100% - 60px)'
                       : 'calc(100% - 48px - 48px)'

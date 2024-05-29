@@ -248,8 +248,7 @@ const getUserGroups = async (account: Account): Promise<string[]> => {
         page = 1
       ): Promise<{ full_path: string }[]> => {
         const res = await fetch(
-          `${
-            env.GITLAB_BASE_URL || 'https://gitlab.com'
+          `${env.GITLAB_BASE_URL || 'https://gitlab.com'
           }/api/v4/groups?per_page=100&page=${page}`,
           { headers: { Authorization: `Bearer ${accessToken}` } }
         )

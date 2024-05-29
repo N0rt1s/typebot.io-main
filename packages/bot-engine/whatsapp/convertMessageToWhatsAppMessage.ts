@@ -64,11 +64,10 @@ export const convertMessageToWhatsAppMessage = (
         return {
           type: 'text',
           text: {
-            body: `${
-              embedBaseUrls[
-                message.content.type as EmbeddableVideoBubbleContentType
+            body: `${embedBaseUrls[
+              message.content.type as EmbeddableVideoBubbleContentType
               ]
-            }/${message.content.id}`,
+              }/${message.content.id}`,
           },
           preview_url: true,
         }

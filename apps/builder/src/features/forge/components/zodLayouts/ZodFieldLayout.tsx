@@ -135,8 +135,8 @@ export const ZodFieldLayout = ({
           items={
             layout?.hiddenItems
               ? innerSchema._def.values.filter(
-                  (v: any) => !layout.hiddenItems.includes(v)
-                )
+                (v: any) => !layout.hiddenItems.includes(v)
+              )
               : innerSchema._def.values
           }
           label={layout?.label}

@@ -22,12 +22,12 @@ import { useTranslate } from '@tolgee/react'
 
 export type PreCheckoutModalProps = {
   selectedSubscription:
-    | {
-        plan: 'STARTER' | 'PRO'
-        workspaceId: string
-        currency: 'eur' | 'usd'
-      }
-    | undefined
+  | {
+    plan: 'STARTER' | 'PRO'
+    workspaceId: string
+    currency: 'eur' | 'usd'
+  }
+  | undefined
   existingCompany?: string
   existingEmail?: string
   onClose: () => void

@@ -40,9 +40,9 @@ export async function startChatQuery({
   const paymentInProgressStateStr = getPaymentInProgressInStorage() ?? undefined
   const paymentInProgressState = paymentInProgressStateStr
     ? (JSON.parse(paymentInProgressStateStr) as {
-        sessionId: string
-        typebot: BotContext['typebot']
-      })
+      sessionId: string
+      typebot: BotContext['typebot']
+    })
     : undefined
   if (paymentInProgressState) {
     removePaymentInProgressFromStorage()
@@ -50,8 +50,7 @@ export async function startChatQuery({
     try {
       const data = await ky
         .post(
-          `${isNotEmpty(apiHost) ? apiHost : guessApiHost()}/api/v1/sessions/${
-            paymentInProgressState.sessionId
+          `${isNotEmpty(apiHost) ? apiHost : guessApiHost()}/api/v1/sessions/${paymentInProgressState.sessionId
           }/continueChat`,
           {
             json: {
@@ -76,8 +75,7 @@ export async function startChatQuery({
     try {
       const data = await ky
         .post(
-          `${
-            isNotEmpty(apiHost) ? apiHost : guessApiHost()
+          `${isNotEmpty(apiHost) ? apiHost : guessApiHost()
           }/api/v1/typebots/${typebotId}/preview/startChat`,
           {
             json: {
@@ -104,8 +102,7 @@ export async function startChatQuery({
   try {
     const data = await ky
       .post(
-        `${
-          isNotEmpty(apiHost) ? apiHost : guessApiHost()
+        `${isNotEmpty(apiHost) ? apiHost : guessApiHost()
         }/api/v1/typebots/${typebotId}/startChat`,
         {
           json: {

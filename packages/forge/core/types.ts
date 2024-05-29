@@ -18,10 +18,10 @@ export type LogsStore = {
     log:
       | string
       | {
-          status: 'error' | 'success' | 'info'
-          description: string
-          details?: unknown
-        }
+        status: 'error' | 'success' | 'info'
+        description: string
+        details?: unknown
+      }
   ) => void
 }
 
@@ -146,7 +146,7 @@ export type FetchItemsParams<T> = T extends ActionDefinition<
   infer Options
 >
   ? {
-      credentials: CredentialsFromAuthDef<A>
-      options: BaseOptions & Options
-    }
+    credentials: CredentialsFromAuthDef<A>
+    options: BaseOptions & Options
+  }
   : never

@@ -66,13 +66,13 @@ export const ChatsProTiersModal = ({ isOpen, onClose }: Props) => {
                         {index === proChatTiers.length - 1
                           ? formatPrice(4.42, { maxFractionDigits: 2 })
                           : index === 0
-                          ? 'included'
-                          : formatPrice(
+                            ? 'included'
+                            : formatPrice(
                               (((pricePerMonth * 100) /
                                 ((tier.up_to as number) -
                                   (proChatTiers.at(0)?.up_to as number))) *
                                 1000) /
-                                100,
+                              100,
                               { maxFractionDigits: 2 }
                             )}
                       </Td>

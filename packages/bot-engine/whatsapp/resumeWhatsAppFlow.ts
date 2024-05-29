@@ -91,17 +91,17 @@ export const resumeWhatsAppFlow = async ({
   const resumeResponse =
     session && !isSessionExpired
       ? await continueBotFlow(reply, {
-          version: 2,
-          state: { ...session.state, whatsApp: { contact } },
-        })
+        version: 2,
+        state: { ...session.state, whatsApp: { contact } },
+      })
       : workspaceId
-      ? await startWhatsAppSession({
+        ? await startWhatsAppSession({
           incomingMessage: reply,
           workspaceId,
           credentials: { ...credentials, id: credentialsId as string },
           contact,
         })
-      : { error: 'workspaceId not found' }
+        : { error: 'workspaceId not found' }
 
   if ('error' in resumeResponse) {
     await removeIsReplyingInChatSession(sessionId)

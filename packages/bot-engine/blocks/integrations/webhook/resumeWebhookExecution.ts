@@ -39,15 +39,15 @@ export const resumeWebhookExecution = ({
     logs.push(
       isError
         ? {
-            status: 'error',
-            description: `Webhook returned error`,
-            details: response.data,
-          }
+          status: 'error',
+          description: `Webhook returned error`,
+          details: response.data,
+        }
         : {
-            status: 'success',
-            description: `Webhook executed successfully!`,
-            details: response.data,
-          }
+          status: 'success',
+          description: `Webhook executed successfully!`,
+          details: response.data,
+        }
     )
 
   const newVariables = block.options?.responseVariableMapping?.reduce<

@@ -81,7 +81,7 @@ export const continueChat = async ({ origin, sessionId, message }: Props) => {
     newSessionState.progressMetadata &&
     !input?.id &&
     (clientSideActions?.filter((c) => c.expectsDedicatedReply).length ?? 0) ===
-      0
+    0
 
   return {
     messages,
@@ -95,10 +95,10 @@ export const continueChat = async ({ origin, sessionId, message }: Props) => {
       ? isEnded
         ? 100
         : computeCurrentProgress({
-            typebotsQueue: newSessionState.typebotsQueue,
-            progressMetadata: newSessionState.progressMetadata,
-            currentInputBlockId: input?.id,
-          })
+          typebotsQueue: newSessionState.typebotsQueue,
+          progressMetadata: newSessionState.progressMetadata,
+          currentInputBlockId: input?.id,
+        })
       : undefined,
   }
 }

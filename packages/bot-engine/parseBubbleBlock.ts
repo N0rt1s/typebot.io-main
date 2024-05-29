@@ -72,8 +72,8 @@ export const parseBubbleBlock = (
     case BubbleBlockType.VIDEO: {
       const parsedContent = block.content
         ? deepParseVariables(variables, { removeEmptyStrings: true })(
-            block.content
-          )
+          block.content
+        )
         : undefined
 
       return {
@@ -182,10 +182,10 @@ export const parseVariablesInRichText = (
 
     const type =
       element.children.length === 1 &&
-      'text' in element.children[0] &&
-      (element.children[0].text as string).startsWith('{{') &&
-      (element.children[0].text as string).endsWith('}}') &&
-      element.type !== 'a'
+        'text' in element.children[0] &&
+        (element.children[0].text as string).startsWith('{{') &&
+        (element.children[0].text as string).endsWith('}}') &&
+        element.type !== 'a'
         ? 'variable'
         : element.type
 

@@ -55,8 +55,8 @@ export const createChatCompletion = createAction({
           },
           defaultQuery: options?.apiVersion
             ? {
-                'api-version': options.apiVersion,
-              }
+              'api-version': options.apiVersion,
+            }
             : undefined,
         } satisfies ClientOptions
 

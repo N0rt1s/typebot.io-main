@@ -60,27 +60,27 @@ export const startChat = async ({
 
   const session = isOnlyRegistering
     ? await restartSession({
-        state: newSessionState,
-      })
+      state: newSessionState,
+    })
     : await saveStateToDatabase({
-        session: {
-          state: newSessionState,
-        },
-        input,
-        logs,
-        clientSideActions,
-        visitedEdges,
-        setVariableHistory,
-        hasCustomEmbedBubble: messages.some(
-          (message) => message.type === 'custom-embed'
-        ),
-      })
+      session: {
+        state: newSessionState,
+      },
+      input,
+      logs,
+      clientSideActions,
+      visitedEdges,
+      setVariableHistory,
+      hasCustomEmbedBubble: messages.some(
+        (message) => message.type === 'custom-embed'
+      ),
+    })
 
   const isEnded =
     newSessionState.progressMetadata &&
     !input?.id &&
     (clientSideActions?.filter((c) => c.expectsDedicatedReply).length ?? 0) ===
-      0
+    0
 
   return {
     sessionId: session.id,
@@ -100,10 +100,10 @@ export const startChat = async ({
       ? isEnded
         ? 100
         : computeCurrentProgress({
-            typebotsQueue: newSessionState.typebotsQueue,
-            progressMetadata: newSessionState.progressMetadata,
-            currentInputBlockId: input?.id,
-          })
+          typebotsQueue: newSessionState.typebotsQueue,
+          progressMetadata: newSessionState.progressMetadata,
+          currentInputBlockId: input?.id,
+        })
       : undefined,
   }
 }

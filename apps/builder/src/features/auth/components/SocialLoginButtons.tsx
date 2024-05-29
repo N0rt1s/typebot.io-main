@@ -19,8 +19,8 @@ import { useTranslate } from '@tolgee/react'
 
 type Props = {
   providers:
-    | Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider>
-    | undefined
+  | Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider>
+  | undefined
 }
 
 export const SocialLoginButtons = ({ providers }: Props) => {

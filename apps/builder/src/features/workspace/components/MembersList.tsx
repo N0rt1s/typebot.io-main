@@ -96,8 +96,8 @@ export const MembersList = () => {
     seatsLimit === 'inf'
       ? true
       : seatsLimit
-      ? currentMembersCount < seatsLimit
-      : false
+        ? currentMembersCount < seatsLimit
+        : false
 
   return (
     <Stack w="full" spacing={3}>

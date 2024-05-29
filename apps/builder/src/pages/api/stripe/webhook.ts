@@ -46,10 +46,10 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
           const session = event.data.object as Stripe.Checkout.Session
           const metadata = session.metadata as unknown as
             | {
-                plan: 'STARTER' | 'PRO'
-                workspaceId: string
-                userId: string
-              }
+              plan: 'STARTER' | 'PRO'
+              workspaceId: string
+              userId: string
+            }
             | { claimableCustomPlanId: string; userId: string }
           if ('plan' in metadata) {
             const { workspaceId, plan } = metadata
@@ -298,9 +298,9 @@ const webhookHandler = async (req: NextApiRequest, res: NextApiResponse) => {
                   },
                   whatsApp: settings.whatsApp
                     ? {
-                        ...settings.whatsApp,
-                        isEnabled: false,
-                      }
+                      ...settings.whatsApp,
+                      isEnabled: false,
+                    }
                     : undefined,
                 },
               },

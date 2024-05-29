@@ -47,16 +47,16 @@ const parseDynamicTheme = (
     hostAvatar:
       initialTheme.chat?.hostAvatar && dynamicTheme?.hostAvatarUrl
         ? {
-            ...initialTheme.chat.hostAvatar,
-            url: dynamicTheme.hostAvatarUrl,
-          }
+          ...initialTheme.chat.hostAvatar,
+          url: dynamicTheme.hostAvatarUrl,
+        }
         : initialTheme.chat?.hostAvatar,
     guestAvatar:
       initialTheme.chat?.guestAvatar && dynamicTheme?.guestAvatarUrl
         ? {
-            ...initialTheme.chat.guestAvatar,
-            url: dynamicTheme?.guestAvatarUrl,
-          }
+          ...initialTheme.chat.guestAvatar,
+          url: dynamicTheme?.guestAvatarUrl,
+        }
         : initialTheme.chat?.guestAvatar,
   },
 })
@@ -100,7 +100,7 @@ export const ConversationContainer = (props: Props) => {
   const [hasError, setHasError] = createSignal(false)
 
   onMount(() => {
-    ;(async () => {
+    ; (async () => {
       const initialChunk = chatChunks()[0]
       if (!initialChunk.clientSideActions) return
       const actionsBeforeFirstBubble = initialChunk.clientSideActions.filter(
@@ -173,9 +173,9 @@ export const ConversationContainer = (props: Props) => {
           details:
             error instanceof HTTPError
               ? {
-                  status: error.response.status,
-                  body: await error.response.json(),
-                }
+                status: error.response.status,
+                body: await error.response.json(),
+              }
               : error,
           status: 'error',
         },

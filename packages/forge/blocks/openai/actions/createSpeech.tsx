@@ -46,8 +46,8 @@ export const createSpeech = createAction({
           },
           defaultQuery: options?.apiVersion
             ? {
-                'api-version': options.apiVersion,
-              }
+              'api-version': options.apiVersion,
+            }
             : undefined,
         } satisfies ClientOptions
 
@@ -79,8 +79,8 @@ export const createSpeech = createAction({
         },
         defaultQuery: isNotEmpty(options.apiVersion)
           ? {
-              'api-version': options.apiVersion,
-            }
+            'api-version': options.apiVersion,
+          }
           : undefined,
       } satisfies ClientOptions
 

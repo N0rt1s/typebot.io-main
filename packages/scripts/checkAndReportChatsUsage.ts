@@ -142,14 +142,14 @@ export const checkAndReportChatsUsage = async () => {
             .filter((member) => member.role === WorkspaceRole.ADMIN)
             .map(
               (member) =>
-                ({
-                  name: 'Subscription automatically updated',
-                  userId: member.user.id,
-                  workspaceId: workspace.id,
-                  data: {
-                    plan: 'PRO',
-                  },
-                } satisfies TelemetryEvent)
+              ({
+                name: 'Subscription automatically updated',
+                userId: member.user.id,
+                workspaceId: workspace.id,
+                data: {
+                  plan: 'PRO',
+                },
+              } satisfies TelemetryEvent)
             )
         )
         await reportUsageToStripe(totalChatsUsed, {
@@ -172,15 +172,15 @@ export const checkAndReportChatsUsage = async () => {
           .filter((member) => member.role === WorkspaceRole.ADMIN)
           .map(
             (member) =>
-              ({
-                name: 'Workspace automatically quarantined',
-                userId: member.user.id,
-                workspaceId: workspace.id,
-                data: {
-                  totalChatsUsed,
-                  chatsLimit,
-                },
-              } satisfies TelemetryEvent)
+            ({
+              name: 'Workspace automatically quarantined',
+              userId: member.user.id,
+              workspaceId: workspace.id,
+              data: {
+                totalChatsUsed,
+                chatsLimit,
+              },
+            } satisfies TelemetryEvent)
           )
       )
     }
@@ -206,16 +206,16 @@ export const checkAndReportChatsUsage = async () => {
 
   const newResultsCollectedEvents = resultsWithWorkspaces.map(
     (result) =>
-      ({
-        name: 'New results collected',
-        userId: result.userId,
-        workspaceId: result.workspace.id,
-        typebotId: result.typebotId,
-        data: {
-          total: result.totalResultsLastHour,
-          isFirstOfKind: result.isFirstOfKind,
-        },
-      } satisfies TelemetryEvent)
+    ({
+      name: 'New results collected',
+      userId: result.userId,
+      workspaceId: result.workspace.id,
+      typebotId: result.typebotId,
+      data: {
+        total: result.totalResultsLastHour,
+        isFirstOfKind: result.isFirstOfKind,
+      },
+    } satisfies TelemetryEvent)
   )
 
   console.log(
@@ -285,41 +285,41 @@ const reportUsageToStripe = async (
 
 const getUsage =
   (prisma: PrismaClient) =>
-  async ({
-    workspaceId,
-    subscription,
-  }: {
-    workspaceId: string
-    subscription: Stripe.Subscription | undefined
-  }) => {
-    const typebots = await prisma.typebot.findMany({
-      where: {
-        workspaceId,
-      },
-      select: {
-        id: true,
-      },
-    })
-
-    const now = new Date()
-    const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
-
-    const totalChatsUsed = await prisma.result.count({
-      where: {
-        typebotId: { in: typebots.map((typebot) => typebot.id) },
-        hasStarted: true,
-        createdAt: {
-          gte: subscription
-            ? new Date(subscription.current_period_start * 1000)
-            : firstDayOfMonth,
+    async ({
+      workspaceId,
+      subscription,
+    }: {
+      workspaceId: string
+      subscription: Stripe.Subscription | undefined
+    }) => {
+      const typebots = await prisma.typebot.findMany({
+        where: {
+          workspaceId,
         },
-      },
-    })
+        select: {
+          id: true,
+        },
+      })
 
-    return {
-      totalChatsUsed,
+      const now = new Date()
+      const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+
+      const totalChatsUsed = await prisma.result.count({
+        where: {
+          typebotId: { in: typebots.map((typebot) => typebot.id) },
+          hasStarted: true,
+          createdAt: {
+            gte: subscription
+              ? new Date(subscription.current_period_start * 1000)
+              : firstDayOfMonth,
+          },
+        },
+      })
+
+      return {
+        totalChatsUsed,
+      }
     }
-  }
 
 const autoUpgradeToPro = async (
   subscription: Stripe.Subscription,

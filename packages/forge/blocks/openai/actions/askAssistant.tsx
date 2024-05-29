@@ -75,8 +75,8 @@ export const askAssistant = createAction({
           },
           defaultQuery: options.apiVersion
             ? {
-                'api-version': options.apiVersion,
-              }
+              'api-version': options.apiVersion,
+            }
             : undefined,
         } satisfies ClientOptions
 
@@ -88,9 +88,9 @@ export const askAssistant = createAction({
           .map((assistant) =>
             assistant.name
               ? {
-                  label: assistant.name,
-                  value: assistant.id,
-                }
+                label: assistant.name,
+                value: assistant.id,
+              }
               : undefined
           )
           .filter(isDefined)
@@ -109,8 +109,8 @@ export const askAssistant = createAction({
           },
           defaultQuery: options.apiVersion
             ? {
-                'api-version': options.apiVersion,
-              }
+              'api-version': options.apiVersion,
+            }
             : undefined,
         } satisfies ClientOptions
 
@@ -247,8 +247,8 @@ const createAssistantStream = async ({
     },
     defaultQuery: apiVersion
       ? {
-          'api-version': apiVersion,
-        }
+        'api-version': apiVersion,
+      }
       : undefined,
   } satisfies ClientOptions
 

@@ -96,9 +96,9 @@ export const getResults = authenticatedProcedure
         isArchived: false,
         createdAt: fromDate
           ? {
-              gte: fromDate,
-              lte: toDate ?? undefined,
-            }
+            gte: fromDate,
+            lte: toDate ?? undefined,
+          }
           : undefined,
       },
       orderBy: {

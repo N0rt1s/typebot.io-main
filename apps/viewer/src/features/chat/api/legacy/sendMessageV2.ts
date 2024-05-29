@@ -66,42 +66,42 @@ export const sendMessageV2 = publicProcedure
           startParams:
             startParams.isPreview || typeof startParams.typebot !== 'string'
               ? {
-                  type: 'preview',
-                  isOnlyRegistering: startParams.isOnlyRegistering ?? false,
-                  isStreamEnabled: startParams.isStreamEnabled ?? false,
-                  startFrom:
-                    'startGroupId' in startParams && startParams.startGroupId
+                type: 'preview',
+                isOnlyRegistering: startParams.isOnlyRegistering ?? false,
+                isStreamEnabled: startParams.isStreamEnabled ?? false,
+                startFrom:
+                  'startGroupId' in startParams && startParams.startGroupId
+                    ? {
+                      type: 'group',
+                      groupId: startParams.startGroupId,
+                    }
+                    : 'startEventId' in startParams &&
+                      startParams.startEventId
                       ? {
-                          type: 'group',
-                          groupId: startParams.startGroupId,
-                        }
-                      : 'startEventId' in startParams &&
-                        startParams.startEventId
-                      ? {
-                          type: 'event',
-                          eventId: startParams.startEventId,
-                        }
+                        type: 'event',
+                        eventId: startParams.startEventId,
+                      }
                       : undefined,
-                  typebotId:
-                    typeof startParams.typebot === 'string'
-                      ? startParams.typebot
-                      : startParams.typebot.id,
-                  typebot:
-                    typeof startParams.typebot === 'string'
-                      ? undefined
-                      : startParams.typebot,
-                  message,
-                  userId: user?.id,
-                }
+                typebotId:
+                  typeof startParams.typebot === 'string'
+                    ? startParams.typebot
+                    : startParams.typebot.id,
+                typebot:
+                  typeof startParams.typebot === 'string'
+                    ? undefined
+                    : startParams.typebot,
+                message,
+                userId: user?.id,
+              }
               : {
-                  type: 'live',
-                  isOnlyRegistering: startParams.isOnlyRegistering ?? false,
-                  isStreamEnabled: startParams.isStreamEnabled ?? false,
-                  publicId: startParams.typebot,
-                  prefilledVariables: startParams.prefilledVariables,
-                  resultId: startParams.resultId,
-                  message,
-                },
+                type: 'live',
+                isOnlyRegistering: startParams.isOnlyRegistering ?? false,
+                isStreamEnabled: startParams.isStreamEnabled ?? false,
+                publicId: startParams.typebot,
+                prefilledVariables: startParams.prefilledVariables,
+                resultId: startParams.resultId,
+                message,
+              },
           message,
         })
 
@@ -124,30 +124,30 @@ export const sendMessageV2 = publicProcedure
 
         const session = startParams?.isOnlyRegistering
           ? await restartSession({
-              state: newSessionState,
-            })
+            state: newSessionState,
+          })
           : await saveStateToDatabase({
-              session: {
-                state: newSessionState,
-              },
-              input,
-              logs: allLogs,
-              clientSideActions,
-              visitedEdges,
-              hasCustomEmbedBubble: messages.some(
-                (message) => message.type === 'custom-embed'
-              ),
-              setVariableHistory,
-            })
+            session: {
+              state: newSessionState,
+            },
+            input,
+            logs: allLogs,
+            clientSideActions,
+            visitedEdges,
+            hasCustomEmbedBubble: messages.some(
+              (message) => message.type === 'custom-embed'
+            ),
+            setVariableHistory,
+          })
 
         return {
           sessionId: session.id,
           typebot: typebot
             ? {
-                id: typebot.id,
-                theme: typebot.theme,
-                settings: typebot.settings,
-              }
+              id: typebot.id,
+              theme: typebot.theme,
+              settings: typebot.settings,
+            }
             : undefined,
           messages,
           input,

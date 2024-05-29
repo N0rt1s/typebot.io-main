@@ -232,9 +232,8 @@ const createAuthFile = async (
         export const auth = {
           type: 'encryptedCredentials',
           name: '${name} account',
-          ${
-            auth === 'apiKey'
-              ? `schema: option.object({
+          ${auth === 'apiKey'
+        ? `schema: option.object({
                     apiKey: option.string.layout({
                       label: 'API key',
                       isRequired: true,
@@ -245,8 +244,8 @@ const createAuthFile = async (
                       isDebounceDisabled: true,
                     }),
                   }),`
-              : ''
-          }
+        : ''
+      }
         } satisfies AuthDefinition`,
       { parser: 'typescript', ...prettierRc }
     )
