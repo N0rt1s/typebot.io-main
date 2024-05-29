@@ -72,7 +72,7 @@ export const SinglePictureButton = (props: Props) => {
           />
         </div>
       </Show>
-      <div class="flex flex-col flex-1" style="background:#f7f8ff;">
+      <div class="flex flex-col flex-1" style={{"background":"#f7f8ff"}}>
         {/* <div >{props.block.question}</div> */}
         <div class='overflow-hidden text-fade-in mx-4 my-2 whitespace-pre-wrap slate-html-container relative text-ellipsis opacity-100 text-right'>
           <PlateText
